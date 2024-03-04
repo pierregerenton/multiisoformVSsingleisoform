@@ -8,7 +8,7 @@ In the manuscript of the [geneidx](https://github.com/guigolab/geneidx), an anal
 
 The purpose of this project is to extended this analysis to understand the mechanisms which genes can benefit from multiple-isoform annotation and why.
 
-**Warning** : This repository is just a way to store and share script for people who want to learn about the project. It is not intended to be reproductible as the data used will not be provided in this git. However, the file [data/get_data.md](./data/get_data.md) will explain how generate these data locally.
+**Warning** : This repository is just a way to store and share script for people who want to learn about the project. It is not intended to be reproductible as the data used will not be provided in this git. However, the file [`data/get_data.md`](./data/get_data.md) will explain how generate these data locally.
 
-## Requierement
+## Requirement
 
