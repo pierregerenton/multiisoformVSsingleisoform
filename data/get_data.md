@@ -39,3 +39,15 @@ agat_sp_keep_longest_isoform.pl -gff [human/mouse].gff3 -o [human/mouse].longest
 ```
 
 Also, the MANE annotation is use for the human genome. You can download it in the [NCBI ftp site](https://ftp.ncbi.nlm.nih.gov/refseq/MANE/MANE_human/release_1.2/) or by clicking [here (release 1.2)](https://ftp.ncbi.nlm.nih.gov/refseq/MANE/MANE_human/release_1.2/MANE.GRCh38.v1.2.ensembl_genomic.gff.gz).
+
+## Extracting proteome
+
+From each annotation, a proteome can be extract. The proteome is a multi-fasta file where each sequence is extracted from the reference genome according to the coordinates of the CDS of a coding transcript in an annotation.
+
+With `AGAT`, you can do that by running :
+```
+agat_sp_extract_sequences.pl -g [human/mouse].[all/long/mane].gff3 -f [human/mouse].fa -t cds -p -o protein.[human/mouse].[all/long/mane].fa
+```
+<!-- 
+## Running Pannzer2 to get GO annotation
+ -->

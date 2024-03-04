@@ -14,5 +14,5 @@ The purpose of this project is to extended this analysis to understand the mecha
 
 If you want to get input data by yourselves :
 
-- [**samtools**](https://github.com/samtools/samtools)
-
+- [samtools](https://github.com/samtools/samtools)
+- [AGAT](https://github.com/NBISweden/AGAT)
