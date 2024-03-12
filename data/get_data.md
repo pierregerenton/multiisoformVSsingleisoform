@@ -48,6 +48,21 @@ With `AGAT`, you can do that by running :
 ```
 agat_sp_extract_sequences.pl -g [human/mouse].[all/long/mane].gff3 -f [human/mouse].fa -t cds -p -o protein.[human/mouse].[all/long/mane].fa
 ```
-<!-- 
-## Running Pannzer2 to get GO annotation
- -->
+
+## GO term annotation
+
+GO term annotation was done with the PANNZER web interface at http://ekhidna2.biocenter.helsinki.fi/sanspanz/.
+We suggest you to uncheck **Remove redundant filter** (cf [`../src/choice_go_set`](../src/choice_go_set)), precise the species of your dataset (if known) and let other parameters by default.
+
+
+
+
+
+
+
+
+
+
+----------------------------
+
+Toronen P, Medlar A, Holm L (2018) PANNZER2: A rapid functional annotation webserver. Nucl. Acids Res. 46, W84-W88
