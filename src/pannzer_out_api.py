@@ -1,12 +1,9 @@
 """API to process Panzzer2 output"""
 
 import copy
-import networkx
-import obonet
+from obonet import read_obo
 import os
-
-url = 'http://purl.obolibrary.org/obo/go/go-basic.obo'
-GO_GRAPH = obonet.read_obo(url, ignore_obsolete=False)
+import networkx
 
 
 class Annotation:
@@ -177,7 +174,7 @@ class EC(Feature):
 
 
 
-def parse_panzzer_annotation(path, name = 'undefined_name'):
+def parse_pannzer_annotation(path, name = 'undefined_name'):
     """
     Return an Annotation object from a PANZZER output
     """
@@ -253,6 +250,13 @@ def make_best_single_isoform_annotation(annotation : Annotation):
         new_gene.add_transcript(copy.deepcopy(best_isoform))
         best_annotation.add_gene(new_gene)
     return best_annotation
+
+def read_go_graph():
+    url = 'http://purl.obolibrary.org/obo/go/go-basic.obo'
+    go_graph = read_obo(url, ignore_obsolete=False)
+    go_graph.remove_edges_from([edge for edge in go_graph.edges if (edge[2] != 'is_a' and edge[2] != 'part_of')])
+    go_graph.remove_nodes_from([node for node in go_graph.nodes if node in ['GO:0005575', 'GO:0008150', 'GO:0003674']])
+    return go_graph
 
 
 def go_list_to_go_ancestry(go_list, go_graph):

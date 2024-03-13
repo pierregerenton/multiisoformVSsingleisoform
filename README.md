@@ -28,3 +28,26 @@ You can install all with :
 ```sh
 pip install -r requierement.txt 
 ```
+
+## Organization of the repo
+
+- [`data`](data) : data location with [`data/get_data.md`](./data/get_data.md) with information to retreive them
+- [`src`](src) : scripts.
+    - [`src/choice_go_set`](src/choice_go_set) : subdirectory with a notebook to explore different dataset we can utilize for our analysis
+    - [`src/analysis_notebook`](src/analysis_notebook) : some notebook used as a base for scripts
+
+
+## Run the code
+
+### Computation of the number of GO term with different annotation between files
+
+To get an UpSetPlot of the number of genes which differ in term of GO annotation between input, you can run this command :
+
+```sh
+python3 src/number_genes_with_different_go_term_between_files.py -i data/pannzer_output/human.all.nr_off.out data/pannzer_output/human.long.nr_off.out data/pannzer_output/human.mane.nr_off.out -b data/pannzer_output/human.all.nr_off.out -o res/human_gene_count.pdf
+```
+
+- `-i` : pannzer output as input file (at least 2, or 1 with -`b` option)
+- `-b` : path of a pannzer output where the best isoform will be kept (and this new element add to the plot)
+- `-a` : infer GO term ancestry (longer)
+- `-o` : name of the output file
