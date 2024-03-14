@@ -4,10 +4,11 @@ import pannzer_out_api as poa
 from os.path import basename
 
 parser = argparse.ArgumentParser(
-                    prog='number_genes_with_different_go_term_between_files',
-                    description='For each pair of annotation (in input), will\
-                          compute the number of genes where GO annotation \
-                            differ and print an UpSetPlot',
+                    prog='similarity',
+                    description='Create 3 table for each ontology \
+                        with the mean similarity for each pair of \
+                            panzzer output in the input + \
+                                write raw data',
                     epilog='For more information, contact pierre.gerenton@crg.eu')
 
 
@@ -197,7 +198,7 @@ def main():
 
     pyplot.suptitle('Mean gene GOGO Similarity for different ontology between files')
     pyplot.draw()
-    pyplot.savefig(args.output_name, format='pdf')
+    pyplot.savefig(args.output_name + '.pdf', format='pdf')
     print('Done !')
 
 
