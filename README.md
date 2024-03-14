@@ -51,3 +51,6 @@ python3 src/number_genes_with_different_go_term_between_files.py -i data/pannzer
 - `-b` : path of a pannzer output where the best isoform will be kept (and this new element add to the plot)
 - `-a` : infer GO term ancestry (longer)
 - `-o` : name of the output file
+
+
+python3 ./similarity_genes_between_files.py -i git_data/pannzer_output/human.all.nr_off.out git_data/pannzer_output/human.long.nr_off.out git_data/pannzer_output/human.mane.nr_off.out -g ~/software/GOGO/ -fb -o human_gene_sim

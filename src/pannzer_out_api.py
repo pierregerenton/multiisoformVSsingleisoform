@@ -305,7 +305,7 @@ def genes_with_diff_go_terms_with_hierarchy(annotation_1, annotation_2, go_graph
     return gene_list
 
 
-def gogo_similarity_between_annotation(annotatation_1 : Annotation, annotation_2 : Annotation, gene_set = None):
+def gogo_similarity_between_annotation(annotatation_1 : Annotation, annotation_2 : Annotation, gogo_dir:str, gene_set = None):
     """
         Return a dict of key = gene_id and value = dict(ontology, similary)
         For example, sim['ENSG0001']['BP'] is the similarity of the BP GO term for the gene ENSG0001 (for the two input annotation)
@@ -324,9 +324,9 @@ def gogo_similarity_between_annotation(annotatation_1 : Annotation, annotation_2
             input_file.write(line)  # gene1 GO:0001 GO:0002; gene2 GO:0001 GO:0002
 
     # running bash script
-    os.system("""
+    os.system(f"""
               CURDIR=$(pwd)
-              cd ~/Software/GOGO/
+              cd {gogo_dir}
               perl gene_pair_comb.pl $CURDIR/gogo_input.txt $CURDIR/gogo_output.txt 
               cd $CURDIR
               """)
@@ -370,7 +370,7 @@ def gogo_similarity_between_annotation(annotatation_1 : Annotation, annotation_2
 #             similarity[gene]['MF'] = line[-1]
 #     return similarity
 
-def gogo_similarity_between_annotation_with_hierarchy(annotatation_1 : Annotation, annotation_2 : Annotation,  go_graph, which = (True, True), gene_set = None):
+def gogo_similarity_between_annotation_with_hierarchy(annotatation_1 : Annotation, annotation_2 : Annotation, gogo_dir:str, go_graph, which = (True, True), gene_set = None):
     """
         Return a dict of key = gene_id and value = dict(ontology, similary)
         For example, sim['ENSG0001']['BP'] is the similarity of the BP GO term for the gene ENSG0001 (for the two input annotation)
@@ -395,9 +395,9 @@ def gogo_similarity_between_annotation_with_hierarchy(annotatation_1 : Annotatio
             input_file.write(line)  # gene1 GO:0001 GO:0002; gene2 GO:0001 GO:0002
 
     # running bash script
-    os.system("""
+    os.system(f"""
               CURDIR=$(pwd)
-              cd ~/Software/GOGO/
+              cd {gogo_dir}
               perl gene_pair_comb.pl $CURDIR/gogo_input.txt $CURDIR/gogo_output.txt 
               cd $CURDIR
               """)

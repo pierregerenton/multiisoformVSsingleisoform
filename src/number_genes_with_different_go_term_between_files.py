@@ -4,10 +4,6 @@ from matplotlib import pyplot
 import pannzer_out_api as poa
 from os.path import basename
 
-# Argument
-
-# -b
-# -a
 
 parser = argparse.ArgumentParser(
                     prog='number_genes_with_different_go_term_between_files',
