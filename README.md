@@ -76,5 +76,20 @@ Two files are generated :
 - `output.pdf` : 3 tables with mean similarity for each ontology and pair of input
 
 
-<!-- python ./precise_analysis_of_one_multiisoform_annotation.py -i git_data/pannzer_output/human.all.nr_off.out -g ~/software/GOGO/ -t long -f -o human_allVSlong_plots.pdf
-          src/precise_analysis_of_one_multiisoform_annotation.py -->
+### Print different plot to compare a reference annotation with an alternative one
+
+This script print plots to compare a reference annotation (usually a multi-isoform one) and and alternative one which is generated.
+There are two possibilities, the `longest` isoform (with the longest cds) and the `best` isoform (with the high number of GO term).
+Plots generated include :
+- Observed and expected similarities for each ontology (expected are calculated by randomly reassigned each transcripts to a gene with conservation of the number of transcripts by gene)
+- GOGO similarity by number of isoforms
+
+```sh
+python3 ./src/precise_analysis_of_one_multiisoform_annotation.py -i data/pannzer_output/human.all.nr_off.out -g ~/Software/GOGO/ -t long -f -o src/human_allVSlong_plots.pdf
+```
+
+- `-i` : reference pannzer output as input file
+- `-g` : path of GOGO directory
+- `-t` : `long` or `best` to choose if the alternative file keep only the longest or the best isoform
+- `-f` : filter gene_set to have only multiple-isoform gene used for similarity
+- `-o` : name of the output file

@@ -4,6 +4,8 @@ import copy
 from obonet import read_obo
 import os
 import networkx
+from copy import deepcopy
+from random import shuffle
 
 
 class Annotation:
@@ -437,4 +439,37 @@ def mean_similarity(similarity):
     result['MF'] = sMF
     return result
 
+
+def make_shuffle_copy(annotation : Annotation):
+    copied = deepcopy(annotation)
+    transcript_list = []
+    for gene in copied.genes.values():
+    #  creating a list of transcripts
+        transcript_list.extend(gene.transcripts.values())
+
+    shuffle(transcript_list)  # shuffle the list
+
+    index = 0
+    for gene in copied.genes.values():
+        n_transcript = len(gene.transcripts)
+        gene.transcripts.clear()  # removing current transcripts
+        for transcript in transcript_list[index:index+n_transcript]:
+            gene.add_transcript(transcript)  # adding random transcripts
+        index += n_transcript
+    copied.name = annotation.name + "_shuffle"  # important when computing similarity
+    return copied
+
+
+def make_longest_single_isoform_annotation(annotation : Annotation):
+    """Return a single-isoform annotation from a multiple one by taking, for each gene,
+    the isoform with the longest sequence"""
+    long_annotation = Annotation(annotation.name + "_long")
+    for gene in annotation.genes:
+        id = annotation[gene].id
+        chr = annotation[gene].chromosome
+        new_gene = Gene(id, chr)
+        long_isoform = max(annotation[gene].transcripts.values(), key= lambda x : len(x.seq))  # select isoform with highest number of GO terms
+        new_gene.add_transcript(deepcopy(long_isoform))
+        long_annotation.add_gene(new_gene)
+    return long_annotation
 
