@@ -84,10 +84,12 @@ def main():
     BP_observed = [ float(similarity_observed[gene]['BP']) for gene in similarity_observed if similarity_observed[gene]['BP'] != 'NA']
     CC_observed = [ float(similarity_observed[gene]['CC']) for gene in similarity_observed if similarity_observed[gene]['CC'] != 'NA']
     MF_observed = [ float(similarity_observed[gene]['MF']) for gene in similarity_observed if similarity_observed[gene]['MF'] != 'NA']
+    print('Mean observed similarity :', poa.mean_similarity(similarity_observed))
     similarity_expected = poa.gogo_similarity_between_annotation(shuffle_annotation, alternative_shuffle_annotation, args.gogo_dir, gene_set)
     BP_expected = [ float(similarity_expected[gene]['BP']) for gene in similarity_expected if similarity_expected[gene]['BP'] != 'NA']
     CC_expected = [ float(similarity_expected[gene]['CC']) for gene in similarity_expected if similarity_expected[gene]['CC'] != 'NA']
-    MF_expected = [ float(similarity_expected[gene]['MF']) for gene in similarity_expected if similarity_expected[gene]['MF'] != 'NA']    
+    MF_expected = [ float(similarity_expected[gene]['MF']) for gene in similarity_expected if similarity_expected[gene]['MF'] != 'NA'] 
+    print('Mean expected similarity :', poa.mean_similarity(similarity_expected))
     print('Done')
     print()    
 

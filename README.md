@@ -93,3 +93,5 @@ python3 ./src/precise_analysis_of_one_multiisoform_annotation.py -i data/pannzer
 - `-t` : `long` or `best` to choose if the alternative file keep only the longest or the best isoform
 - `-f` : filter gene_set to have only multiple-isoform gene used for similarity
 - `-o` : name of the output file
+
+<!-- python ./make_metadata_and_similarity_table.py -m git_data/pannzer_output/human.all.nr_off.out -s git_data/pannzer_output/human.long.nr_off.out -g ~/software/GOGO/ -f -o human_allVSlong_sim -->
