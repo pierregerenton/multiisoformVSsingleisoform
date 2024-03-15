@@ -94,4 +94,11 @@ python3 ./src/precise_analysis_of_one_multiisoform_annotation.py -i data/pannzer
 - `-f` : filter gene_set to have only multiple-isoform gene used for similarity
 - `-o` : name of the output file
 
-<!-- python ./make_metadata_and_similarity_table.py -m git_data/pannzer_output/human.all.nr_off.out -s git_data/pannzer_output/human.long.nr_off.out -g ~/software/GOGO/ -f -o human_allVSlong_sim -->
+
+### Make a similarity table for each gene between two panzzer output
+
+With two Pannzer output, one from a multiple-isoform annotation and the other from a single-isoform annotation, a table with the similarity for each genes between files is written by this script (with the number of coding isoform for the gene) :
+
+```sh
+python3 .src/make_metadata_and_similarity_table.py -m data/pannzer_output/human.all.nr_off.out -s data/pannzer_output/human.long.nr_off.out -g ~/Software/GOGO/ -f -o human_allVSlong_sim
+```
