@@ -12,8 +12,8 @@ class Annotation:
     """Represent a set of genes."""
 
     def __init__(self, name) -> None:
-        self.name = name
-        self.genes = dict()
+        self.name : str = name
+        self.genes : dict[str, Gene] = dict()
 
     def __getitem__(self, gene):
         return self.genes[gene]
@@ -42,8 +42,7 @@ class Annotation:
 
     # Getters
 
-    def get_gene(self, gene):
-        """gene is a string"""
+    def get_gene(self, gene : str) :
         return self[gene]
 
 
@@ -52,9 +51,9 @@ class Gene:
     """Represent a gene in an annotation."""
 
     def __init__(self, id, chromosome) -> None:
-        self.id = id
-        self.transcripts = dict()
-        self.chromosome = chromosome
+        self.id : str = id
+        self.transcripts : dict[str, Transcript] = dict()
+        self.chromosome : str = chromosome
 
 
     def __str__(self) -> str:
@@ -72,11 +71,17 @@ class Gene:
 
     # Getters
             
-    def get_go_term_id(self, threesold=0):
+    def get_go_term_id(self, threesold=0) -> list[str]:
         ids = set()
         for transcripts in self.transcripts.values():
             ids.update(transcripts.get_go_term_id(threesold=threesold))
         return list(ids)
+    
+    def get_transcript(self, transcript_id : str):
+        return self.transcripts[transcript_id]
+    
+    def get_transcripts_id(self) -> list[str]:
+        return list(self.transcripts.keys())
 
 
 
@@ -100,7 +105,7 @@ class Transcript:
     
     # Getters
 
-    def get_go_term_id(self, threesold=0):
+    def get_go_term_id(self, threesold=0) -> list[str]:
         """Return a list of ids of the GO term assigned to this transcript."""
         return [go.id for go in self.gos if go.ppv > threesold]
 
@@ -183,7 +188,7 @@ def parse_pannzer_annotation(path, name = 'undefined_name'):
     annotation = Annotation(name)
     with open(path) as file:
         for line in file:
-            line = line.split('\t')
+            line = line.strip().split('\t')
             match line[1]:  # line[1] is type of line
                 case "original_DE":
                     # get gene info from sequence description
@@ -307,7 +312,7 @@ def genes_with_diff_go_terms_with_hierarchy(annotation_1, annotation_2, go_graph
     return gene_list
 
 
-def gogo_similarity_between_annotation(annotatation_1 : Annotation, annotation_2 : Annotation, gogo_dir:str, gene_set = None):
+def gogo_similarity_between_annotation(annotatation_1 : Annotation, annotation_2 : Annotation, gogo_dir:str, gene_set = None) -> dict[str, dict[str, str]]:
     """
         Return a dict of key = gene_id and value = dict(ontology, similary)
         For example, sim['ENSG0001']['BP'] is the similarity of the BP GO term for the gene ENSG0001 (for the two input annotation)
@@ -372,7 +377,7 @@ def gogo_similarity_between_annotation(annotatation_1 : Annotation, annotation_2
 #             similarity[gene]['MF'] = line[-1]
 #     return similarity
 
-def gogo_similarity_between_annotation_with_hierarchy(annotatation_1 : Annotation, annotation_2 : Annotation, gogo_dir:str, go_graph, which = (True, True), gene_set = None):
+def gogo_similarity_between_annotation_with_hierarchy(annotatation_1 : Annotation, annotation_2 : Annotation, gogo_dir:str, go_graph, which = (True, True), gene_set = None)  -> dict[str, dict[str, str]]:
     """
         Return a dict of key = gene_id and value = dict(ontology, similary)
         For example, sim['ENSG0001']['BP'] is the similarity of the BP GO term for the gene ENSG0001 (for the two input annotation)

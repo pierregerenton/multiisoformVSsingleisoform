@@ -47,7 +47,7 @@ To get an UpSetPlot of the number of genes which differ in term of GO annotation
 python3 src/number_genes_with_different_go_term_between_files.py -i data/pannzer_output/human.all.nr_off.out data/pannzer_output/human.long.nr_off.out data/pannzer_output/human.mane.nr_off.out -b data/pannzer_output/human.all.nr_off.out -o res/human_gene_count.pdf
 ```
 
-- `-i` : pannzer output as input file (at least 2, or 1 with -`b` option)
+- `-i` : pannzer output as input file (at least 2, or 1 with `-b` option)
 - `-b` : path of a pannzer output where the best isoform will be kept (and this new element add to the plot)
 - `-a` : infer GO term ancestry (longer)
 - `-o` : name of the output file
@@ -63,7 +63,7 @@ To get tables of mean gene similarity between files and a table of similarity be
 python3 ./similarity_genes_between_files.py -i git_data/pannzer_output/human.all.nr_off.out git_data/pannzer_output/human.long.nr_off.out git_data/pannzer_output/human.mane.nr_off.out -g ~/software/GOGO/ -fb -o res/human_gene_sim
 ```
 
-- `-i` : pannzer output as input file (at least 2, or 1 with -`b` option)
+- `-i` : pannzer output as input file (at least 2, or 1 with `-b` option)
 - `-g` : path of GOGO directory
 - `-b` : path of a pannzer output where the best isoform will be kept (and this new element add to the plot)
 - `-a` : infer GO term ancestry (longer)
@@ -100,5 +100,85 @@ python3 ./src/precise_analysis_of_one_multiisoform_annotation.py -i data/pannzer
 With two Pannzer output, one from a multiple-isoform annotation and the other from a single-isoform annotation, a table with the similarity for each genes between files is written by this script (with the number of coding isoform for the gene) :
 
 ```sh
-python3 .src/make_metadata_and_similarity_table.py -m data/pannzer_output/human.all.nr_off.out -s data/pannzer_output/human.long.nr_off.out -g ~/Software/GOGO/ -f -o human_allVSlong_sim
+python3 ./src/make_metadata_and_similarity_table.py -m data/pannzer_output/human.all.nr_off.out -s data/pannzer_output/human.long.nr_off.out -g ~/Software/GOGO/ -f -o human_allVSlong_sim
 ```
+
+- `-m` : path to a pannzer output as input file (from a multiple-isoform annotation)
+- `-s` : path to a pannzer output as input file (from a single-isoform annotation)
+- `-g` : path of GOGO directory
+- `-a` : infer GO term ancestry (longer)
+- `-f` : filter gene_set to have only multiple-isoform gene used for similarity
+- `-o` : name of the output file
+
+
+
+### Write exhaustive data table with metadata and similarity based on a multiple-isoform annotation
+
+From the Pannzer output of a multiple-isoform annotation's proteome, create two tables with metadata (parsing of the annotation) and optionally similarity table.
+
+```sh
+python3 ./src/description_table.py -m data/pannzer_output/human.all.nr_off.out -g ~/Software/GOGO/ -o exhaustive -lbc data/pannzer_output/human.mane.nr_off.out
+```
+
+- `-m` : path to a pannzer output as input file (from a multiple-isoform annotation)
+- `-g` : path of GOGO directory
+- `-a` : infer GO term ancestry (longer)
+- `-f` : filter gene_set to have only multiple-isoform gene used for similarity
+- `-o` : name of the output file
+- `-c` : path to a pannzer output as input file (from a custom single-isoform annotation) to compute similarity with this one
+- `-l` : to compare similarity with the longest isoform
+- `-b` : to compare similarity with the beest isoform (isoform with the highest number of GO terms)
+
+Two files will be generated :
+
+- `output.metadata.txt` from the parsing of the multiple-isoform annotation (one line by **transcript**)
+    - `chromosome` : chromosome of the gene
+    - `gene_id` : ensembl gene id
+    - `nb_isoform` : nb of coding isoform PRESENT in the pannzer output
+    - `list_of_go_term_assigned_to_the_gene` : list of go term assigned to the gene by pannzer
+    - `nb_go_term_assigned_to_the_gene` : nb of go term assigned to the gene by pannzer
+    - `transcript_id` : transcript id of the transcript
+    - `description` : predicted description of the transcript
+    - `score` : ppv of this prediction
+    - `list_of_go_term_assigned_to_the_transcript` : list of go term assigned to the transcript by pannzer
+    - `nb_go_term_assigned_to_the_transcript` : nb of go term assigned to the transcript by pannzer
+
+
+- `output.similarity.txt` if at least one option between `-c -b -l` is present, create a table with similarity (one line by **gene**)
+    - `chromosome` : chromosome of the gene
+    - `gene_id` : ensembl gene id
+    - `nb_isoform` : nb of coding isoform PRESENT in the pannzer output
+    - `list_of_go_term_assigned_to_the_gene` : list of go term assigned to the gene by pannzer
+    - `nb_go_term_assigned_to_the_gene` : nb of go term assigned to the gene by pannzer
+
+        **only if you use `-c`**
+    - `transcript_id_custom` : transcript id of the chosen transcript for the custom single-isoform annotation
+    - `description_custom` : predicted description of the chosen transcript
+    - `score_custom` : ppv of this prediction
+    - `list_of_go_term_assigned_to_the_transcript_custom` : list of go term assigned to the chosen transcript by pannzer
+    - `nb_go_term_assigned_to_the_transcript_custom` : nb of go term assigned to the chosen transcript by pannzer
+    - `BP_similarity_custom` : GOGO similarity of BP term between the set of go term assigned to the gene and to the custom transcript only
+    - `CC_similarity_custom` : GOGO similarity of CC term between the set of go term assigned to the gene and to the custom transcript only
+    - `MF_similarity_custom` : GOGO similarity of MF term between the set of go term assigned to the gene and to the custom transcript only
+
+        **only if you use `-l`**
+
+    - `transcript_id_longest` : transcript id of the longest transcript 
+    - `description_longest` : predicted description of the longest transcript
+    - `score_longest` : ppv of this prediction
+    - `list_of_go_term_assigned_to_the_transcript_longest` : list of go term assigned to the chosen transcript by pannzer
+    - `nb_go_term_assigned_to_the_transcript_longest` : nb of go term assigned to the chosen transcript by pannzer
+    - `BP_similarity_longest` : GOGO similarity of BP term between the set of go term assigned to the gene and to the longest transcript only
+    - `CC_similarity_longest` : GOGO similarity of CC term between the set of go term assigned to the gene and to the longest transcript only
+    - `MF_similarity_longest` : GOGO similarity of MF term between the set of go term assigned to the gene and to the longest transcript only
+
+        **only if you use `-b`**
+ 
+    - `transcript_id_best` : transcript id of the best transcript (with the highest number of go term) 
+    - `description_best` : predicted description of the best transcript
+    - `score_best` : ppv of this prediction
+    - `list_of_go_term_assigned_to_the_transcript_best` : list of go term assigned to the chosen transcript by pannzer
+    - `nb_go_term_assigned_to_the_transcript_best` : nb of go term assigned to the chosen transcript by pannzer
+    - `BP_similarity_best` : GOGO similarity of BP term between the set of go term assigned to the gene and to the best transcript only
+    - `CC_similarity_best` : GOGO similarity of CC term between the set of go term assigned to the gene and to the best transcript only
+    - `MF_similarity_best` : GOGO similarity of MF term between the set of go term assigned to the gene and to the best transcript only
