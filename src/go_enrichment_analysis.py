@@ -158,7 +158,7 @@ def main():
         MF=ctr['MF'],  # molecular_function
         CC=ctr['CC'])) # cellular_component
     goea_obj.wr_tsv(args.output_name + ".goea_results.tsv", goea_results_sig)
-    plot_results(args.output_name + ".{NS}_graph_of_significative_GO.png", goea_results_sig)
+    plot_results(args.output_name + ".{NS}_graph_of_significant_GO.png", goea_results_sig)
 
 
 if __name__=="__main__":

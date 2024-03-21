@@ -215,4 +215,4 @@ python3 ./src/go_enrichment_analysis.py -i res/exhaustive.similarity.txt --bp_co
 Four files are generated :
 
 - `output.goea.tsv` : table with enriched go term (and p-value, FDR, etc)
-- `output.{NS}_graph_of_significative_GO.png` `x3` : plot of a subgraph of the GO graph with GO term which enrich our gene set.
+- `output.{NS}_graph_of_significant_GO.png` `x3` : plot of a subgraph of the GO graph with GO term which enrich our gene set.
