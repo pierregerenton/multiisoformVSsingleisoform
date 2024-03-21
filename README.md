@@ -188,3 +188,31 @@ Two files will be generated :
     - `MF_similarity_best` : GOGO similarity of MF term between the set of go term assigned to the gene and to the best transcript only
 
 **Note** : Results are not available on GitHub due to size issue.
+
+
+### Perform GO Enrichment Analysis (GOEA) on previous results
+
+To find if the subset of gene with low similarity is enriched in some terms, you can run :
+
+```sh
+python3 ./src/go_enrichment_analysis.py -i res/exhaustive.similarity.txt --bp_column BP_similarity_longest --cc_column CC_similarity_longest \
+        --mf_column MF_similarity_longest --bp_thresold 0.9 --ensembl2ncbi data/gene2ensembl.gz --go_dag data/go-basic.obo --gene2go data/gene2go -o res/human_allVSlong
+```
+
+- `-i` : TSV table with at least a column for each BP, CC, MF similarity and one for gene ID
+- `--bp_column` : Name of the column with BP similarity (default : BP_similarity)
+- `--bp_thresold` : Maximum BP similarity to keep a gene list to perform the enrichment (default : 1)
+- `--cc_column` : Name of the column with CC similarity (default : CC_similarity)
+- `--cc_thresold` : Maximum CC similarity to keep a gene list to perform the enrichment (default : 1)
+- `--mf_column` : Name of the column with MF similarity (default : MF_similarity)
+- `--mf_thresold` : Maximum MF similarity to keep a gene list to perform the enrichment (default : 1)
+- `--ensembl2ncbi` : path of gene2ensembl.gz file from NCBI
+- `--go_dag` : path of go-basic.obo file
+- `--gene2go` : path of gene2go UNZIP file from NCBI
+- `--taxid` : NCBI TaxID of the studied species (default : 9606 for human)
+- `-o` : Name of the output file
+
+Four files are generated :
+
+- `output.goea.tsv` : table with enriched go term (and p-value, FDR, etc)
+- `output.{NS}_graph_of_significative_GO.png` `x3` : plot of a subgraph of the GO graph with GO term which enrich our gene set.

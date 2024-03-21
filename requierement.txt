@@ -1,6 +1,7 @@
-obonet==1.0.0
-UpSetPlot==0.9.0
+goatools==1.3.11
 matplotlib==3.8.2
 matplotlib-inline==0.1.6
 networkx==3.2.1
+obonet==1.0.0
 seaborn==0.13.2
+UpSetPlot==0.9.0
