@@ -21,6 +21,10 @@ To compute GO semantic similarity :
 
 - [GOGO](https://github.com/zwang-bioinformatics/GOGO) : to run this software, your current working directory needs to be the installation GOGO directory
 
+To visualize the GOEA (GO Enrichment Analysis) :
+
+- [Graphviz](https://www.graphviz.org/) : it's an open source graph visualization software.
+
 You'll also need [python3](https://www.python.org/downloads/) and some packages written in [`requierement.txt`](requierement.txt).
 
 You can install all with :

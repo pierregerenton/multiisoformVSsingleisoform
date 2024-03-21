@@ -55,9 +55,29 @@ GO term annotation was done with the PANNZER web interface at http://ekhidna2.bi
 We suggest you to uncheck **Remove redundant filter** (cf [`../src/choice_go_set`](../src/choice_go_set)), precise the species of your dataset (if known) and let other parameters by default.
 
 
+## GO graph
+
+The GO ontology is represented as a DAG available in the `.obo` format.
+
+```sh
+wget https://purl.obolibrary.org/obo/go/go-basic.obo -O data/go-basic.obo
+```
 
 
+## NCBI Data for GO Enrichment Analysis
 
+We need a file to convert NCBI Gene ID to Ensembl Gene ID :
+
+```sh
+wget https://ftp.ncbi.nlm.nih.gov/gene/DATA/gene2ensembl.gz -O data/gene2ensembl.gz
+```
+
+We need a file to get GO term assigned to each NCBI Gene ID :
+
+```sh
+wget https://ftp.ncbi.nlm.nih.gov/gene/DATA/gene2go.gz -O data/gene2go.gz
+gunzip data/gene2go.gz
+```
 
 
 
@@ -66,3 +86,6 @@ We suggest you to uncheck **Remove redundant filter** (cf [`../src/choice_go_set
 ----------------------------
 
 Toronen P, Medlar A, Holm L (2018) PANNZER2: A rapid functional annotation webserver. Nucl. Acids Res. 46, W84-W88
+
+Sayers, E. W., Bolton, E. E., Brister, J. R., Canese, K., Chan, J., Comeau, D. C., Connor, R., Funk, K., Kelly, C., Kim, S., Madej, T., Marchler-Bauer, A., Lanczycki, C., Lathrop, S., Lu, Z., Thibaud-Nissen, F., Murphy, T., Phan, L., Skripchenko, Y., Tse, T., … Sherry, S. T. (2022). Database resources of the national center for biotechnology information. Nucleic acids research, 50(D1), D20–D26. https://doi.org/10.1093/nar/gkab1112
+
