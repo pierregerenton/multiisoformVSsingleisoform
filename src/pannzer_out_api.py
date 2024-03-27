@@ -321,7 +321,7 @@ def gogo_similarity_between_annotation(annotatation_1 : Annotation, annotation_2
         gene_set = [gene for gene in annotatation_1.genes if gene in annotation_2.genes]
 
     # write input file for the bash script
-    with open(f"{gogo_file}.input.txt", 'w') as input_file:
+    with open(f"{gogo_file}.gogo_input.txt", 'w') as input_file:
         for gene in gene_set:
             id = annotatation_1[gene].id
             line = id + '-' + annotatation_1.name + ' '
@@ -334,13 +334,13 @@ def gogo_similarity_between_annotation(annotatation_1 : Annotation, annotation_2
     os.system(f"""
               CURDIR=$(pwd)
               cd {gogo_dir}
-              perl gene_pair_comb.pl $CURDIR/{gogo_file}.input.txt $CURDIR/{gogo_file}.output.txt 
+              perl gene_pair_comb.pl $CURDIR/{gogo_file}.gogo_input.txt $CURDIR/{gogo_file}.gogo_output.txt 
               cd $CURDIR
               """)
     
     # parsing output script
     similarity = dict()
-    with open(f"{gogo_file}.output.txt") as output_file:
+    with open(f"{gogo_file}.gogo_output.txt") as output_file:
         for line, gene in zip(output_file, gene_set):
             # line = line.replace('NA','1.000') # do not do that, if geneA has no go term but geneB have, NA will be displayed
             line = line.strip().split(' ')
@@ -386,7 +386,7 @@ def gogo_similarity_between_annotation_with_hierarchy(annotatation_1 : Annotatio
         gene_set = [gene for gene in annotatation_1.genes if gene in annotation_2.genes]
 
     # write input file for the bash script
-    with open(f"{gogo_file}.input.txt", 'w') as input_file:
+    with open(f"{gogo_file}.gogo_input.txt", 'w') as input_file:
         for gene in gene_set:
             id = annotatation_1[gene].id
             line = id + '-' + annotatation_1.name + '_A1 '
@@ -405,13 +405,13 @@ def gogo_similarity_between_annotation_with_hierarchy(annotatation_1 : Annotatio
     os.system(f"""
               CURDIR=$(pwd)
               cd {gogo_dir}
-              perl gene_pair_comb.pl $CURDIR/{gogo_file}.input.txt $CURDIR/{gogo_file}.output.txt 
+              perl gene_pair_comb.pl $CURDIR/{gogo_file}.gogo_input.txt $CURDIR/{gogo_file}.gogo_output.txt 
               cd $CURDIR
               """)
     
     # parsing output script
     similarity = dict()
-    with open(f"{gogo_file}.output.txt") as output_file:
+    with open(f"{gogo_file}.gogo_output.txt") as output_file:
         for line, gene in zip(output_file, gene_set):
             # line = line.replace('NA','1.000') # do not do that, if geneA has no go term but geneB have, NA will be displayed
             line = line.strip().split(' ')

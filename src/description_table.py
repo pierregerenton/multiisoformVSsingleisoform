@@ -114,7 +114,7 @@ def main():
     
         print('Computing similarity ...')
 
-        gogo_name = args.multi_isoform.split('.')[0]
+        gogo_name = args.multi_isoform.split('.')[0].split('/')[-1]
         if args.custom_single_isoform is not None:
             sim_custom = fun(multi_isoform, custom_isoform, args.gogo_dir, gogo_file=gogo_name + ".custom", **argument)
         if args.longest_single_isoform:

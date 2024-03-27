@@ -121,8 +121,10 @@ python3 ./src/make_metadata_and_similarity_table.py -m data/pannzer_output/human
 From the Pannzer output of a multiple-isoform annotation's proteome, create two tables with metadata (parsing of the annotation) and optionally similarity table.
 
 ```sh
-python3 ./src/description_table.py -m data/pannzer_output/human.all.nr_off.out -g ~/Software/GOGO/ -o exhaustive -lbc data/pannzer_output/human.mane.nr_off.out
+python3 ./src/description_table.py -m data/pannzer_output/human.all.nr_off.out -g ~/Software/GOGO/ -o res/exhaustive -lbc data/pannzer_output/human.mane.nr_off.out
 ```
+python3 ./src/description_table.py -m data/pannzer_output/chr21.all.nr_off.out -g ~/Software/GOGO/ -o draft -lb
+
 
 - `-m` : path to a pannzer output as input file (from a multiple-isoform annotation)
 - `-g` : path of GOGO directory
