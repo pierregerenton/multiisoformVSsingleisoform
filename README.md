@@ -23,6 +23,7 @@ The purpose of this project is to extended this analysis to understand the mecha
     - [Make a similarity table for each gene between two pannzer output](#make-a-similarity-table-for-each-gene-between-two-pannzer-output)
     - [Write exhaustive data table with metadata and similarity based on a multiple isoform annotation](#write-exhaustive-data-table-with-metadata-and-similarity-based-on-a-multiple-isoform-annotation)
     - [Perform GO enrichment analysis (GOEA) on previous results](#perform-go-enrichment-analysis-goea-on-previous-results)
+    - [Evaluate isoforms diversity for each gene](#evaluate-isoforms-diversity-for-each-gene)
 
 ## Requirement
 
@@ -230,3 +231,64 @@ Four files are generated :
 
 - `output.goea.tsv` : table with enriched go term (and p-value, FDR, etc)
 - `output.{NS}_graph_of_significant_GO.png` `x3` : plot of a subgraph of the GO graph with GO term which enrich our gene set.
+
+
+### Evaluate isoforms diversity for each gene
+
+To evaluate isoforms diversity for each gene with different metrics, you should run :
+
+```sh
+python3 src/intragene_isoform_diversity.py -i data/pannzer_output/human.all.nr_off.out -o res/isoforms_diversity
+```
+
+#### Metrics computed in all isoform :
+
+Let $G$, the set, a set of isoform defined as :
+$$ G = \{ I_1, I_2, \ldots, I_n \} $$
+where each $I_i$ is a set of multiple GO terms defined as :
+$$ I_i = \{ T_{i1}, T_{i2}, \ldots, T_{im_i} \} $$
+
+
+***Number of isoform : number of isoform***
+$$n_{isoform} = |G|$$
+
+***Standard deviation of the number of GO term***
+$$\sigma_{m_i} = \sqrt{\frac{1}{n}\sum_{i=1}^{n}{(m_i-\bar{m_i} )^2}}$$
+
+***Redudancy metric***\
+This metrics was designed to have an idea of the number of times a GO term appear in the genes.
+For each unique GO term, his number of reoccurence is count ($0$ if it appear only in $1$ isoform, and $n-1$ if it appear in all isoform). Then, the mean of this counting is done to have the mean count of reoccurence. Finally, this count is divided by the $n-1$.
+If $r$ is close to $1$, that's means that all GO terms are present in all isoforms, and if $r$ is close to $0$, each isoform is different.
+
+If there is 1 isoform, the redudancy metric is set to $1$.
+
+Let $O$ be the set of all unique GO terms defined as :
+$$O = \bigcup_{i=1}^n I_i = \{ T_{1}, T_{2}, \ldots, T_{n_o} \}$$
+Let $count(T_i)$ the number of isoform where $T_i$ is present.
+$$r = \frac{1}{n-1} \sum_{i=1}^ {n_o}(count(T_i)-1)$$
+
+
+#### Metrics computed in all isoform :
+Certain metrics were calculated for each pair of isoforms before all the values were averaged.
+
+***Jaccard index***\
+The Jaccard index is measure of similarity.\
+If $I_1 \cup I_2  = \empty$, $J(I_1, I_2) = 1$, else
+
+$$J(I_1, I_2) = \frac{|I_1 \cap I_2|}{|I_1 \cup I_2|}$$
+
+***Dice coefficient***\
+The Sørensen–Dice coefficient is measure of similarity.\
+If $I_1 \cup I_2  = \empty$, $D(I_1, I_2) = 1$, else
+
+$$D(I_1, I_2) = \frac{2|I_1 \cap I_2|}{|I_1| + |I_2|}$$
+
+***Overlap coefficient***\
+If $min(|I_1|,|I_2|) = 0$, then $overlap(I_1, I_2) = 1$, else
+
+$$overlap(I_1, I_2) = \frac{|I_1 \cap I_2|}{min(|I_1|,|I_2|)}$$
+
+
+Two files are generated :
+- `output.data.tsv` : measurement for each gene
+- `output.summary.tsv` : descriptive statistics for each measurement
