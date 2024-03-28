@@ -10,6 +10,20 @@ The purpose of this project is to extended this analysis to understand the mecha
 
 **Warning** : This repository is just a way to store and share script for people who want to learn about the project. It is not intended to be reproductible as the data used will not be provided in this git. However, the file [`data/get_data.md`](./data/get_data.md) will explain how generate these data locally.
 
+## Summary
+
+- [Goal](#goal)
+- [Summary](#summary)
+- [Requierement](#requirement)
+- [Organization of the repo](#organization-of-the-repo)
+- [Run the code](#run-the-code)
+    - [Computation of the number of GO terms with different annotation between files](#computation-of-the-number-of-go-terms-with-different-annotation-between-files)
+    - [Computation of GOGO Similarity of genes between files](#computation-of-gogo-similarity-of-genes-between-files)
+    - [Print different plot to compare a reference annotation with an alternative one](#print-different-plot-to-compare-a-reference-annotation-with-an-alternative-one)
+    - [Make a similarity table for each gene between two pannzer output](#make-a-similarity-table-for-each-gene-between-two-pannzer-output)
+    - [Write exhaustive data table with metadata and similarity based on a multiple isoform annotation](#write-exhaustive-data-table-with-metadata-and-similarity-based-on-a-multiple-isoform-annotation)
+    - [Perform GO enrichment analysis (GOEA) on previous results](#perform-go-enrichment-analysis-goea-on-previous-results)
+
 ## Requirement
 
 If you want to get input data by yourselves :
@@ -43,7 +57,7 @@ pip install -r requierement.txt
 
 ## Run the code
 
-### Computation of the number of GO term with different annotation between files
+### Computation of the number of GO terms with different annotation between files
 
 To get an UpSetPlot of the number of genes which differ in term of GO annotation between input, you can run this command :
 
@@ -59,7 +73,7 @@ python3 src/number_genes_with_different_go_term_between_files.py -i data/pannzer
 
 python3 ./similarity_genes_between_files.py -i git_data/pannzer_output/human.all.nr_off.out git_data/pannzer_output/human.long.nr_off.out git_data/pannzer_output/human.mane.nr_off.out -g ~/software/GOGO/ -fb -o human_gene_sim
 
-### Computation of the GOGO similarity of genes between files
+### Computation of GOGO similarity of genes between files
 
 To get tables of mean gene similarity between files and a table of similarity between each gene for each pair, you can run this command :
 
@@ -123,8 +137,6 @@ From the Pannzer output of a multiple-isoform annotation's proteome, create two 
 ```sh
 python3 ./src/description_table.py -m data/pannzer_output/human.all.nr_off.out -g ~/Software/GOGO/ -o res/exhaustive -lbc data/pannzer_output/human.mane.nr_off.out
 ```
-python3 ./src/description_table.py -m data/pannzer_output/chr21.all.nr_off.out -g ~/Software/GOGO/ -o draft -lb
-
 
 - `-m` : path to a pannzer output as input file (from a multiple-isoform annotation)
 - `-g` : path of GOGO directory
