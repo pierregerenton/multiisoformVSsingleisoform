@@ -273,13 +273,13 @@ Certain metrics were calculated for each pair of isoforms before all the values 
 
 ***Jaccard index***\
 The Jaccard index is measure of similarity.\
-If $I_1 \cup I_2  = \empty$, $J(I_1, I_2) = 1$, else
+If $I_1 \cup I_2  = \emptyset$, $J(I_1, I_2) = 1$, else
 
 $$J(I_1, I_2) = \frac{|I_1 \cap I_2|}{|I_1 \cup I_2|}$$
 
 ***Dice coefficient***\
 The Sørensen–Dice coefficient is measure of similarity.\
-If $I_1 \cup I_2  = \empty$, $D(I_1, I_2) = 1$, else
+If $I_1 \cup I_2  = \emptyset$, $D(I_1, I_2) = 1$, else
 
 $$D(I_1, I_2) = \frac{2|I_1 \cap I_2|}{|I_1| + |I_2|}$$
 
