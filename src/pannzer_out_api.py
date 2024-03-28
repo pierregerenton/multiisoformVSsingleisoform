@@ -6,6 +6,8 @@ import os
 import networkx
 from copy import deepcopy
 from random import shuffle
+from itertools import combinations
+from statistics import pstdev
 
 
 class Annotation:
@@ -15,14 +17,21 @@ class Annotation:
         self.name : str = name
         self.genes : dict[str, Gene] = dict()
 
-    def __getitem__(self, gene):
+    def __getitem__(self, gene : str):
         return self.genes[gene]
     
-    def __str__(self):
+    def __str__(self) -> str:
         return f"Annotation '{self.name}' with {len(self.genes)} genes"
     
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"<Annotation '{self.name}'>"
+    
+    def __iter__(self):  # delegate iteration to the dict
+        return iter(self.genes)
+    
+    def __len__(self) -> int:
+        return len(self.genes)
+
 
     # Setters
         
@@ -44,6 +53,15 @@ class Annotation:
 
     def get_gene(self, gene : str) :
         return self[gene]
+    
+
+    # Methods
+
+    def number_of_genes(self) -> int:
+        return len(self.genes)
+    
+    def number_of_isoforms(self) -> int:
+        return sum(x.number_of_isoforms() for x in self.genes.values())
 
 
 
@@ -55,6 +73,9 @@ class Gene:
         self.transcripts : dict[str, Transcript] = dict()
         self.chromosome : str = chromosome
 
+
+    def __getitem__(self, transcript : str):
+        return self.transcripts[transcript]
 
     def __str__(self) -> str:
         return f"Gene '{self.id}' with {len(self.transcripts)} transcripts"
@@ -83,6 +104,60 @@ class Gene:
     def get_transcripts_id(self) -> list[str]:
         return list(self.transcripts.keys())
 
+    # Methods
+
+    def number_of_isoforms(self) -> int:
+        """Return the number of isoforms of the gene."""
+        return len(self.transcripts)
+    
+    def stdev_number_of_go_by_isoform(self) -> float:
+        """Return the POPULATION sd of the number of GO term
+        by isoform."""
+        data : list[int] = [iso.number_of_go_terms() for iso in self.transcripts.values()]
+        return pstdev(data)
+    
+    def go_redundance_metric(self) -> float:
+        """Custom metrics between 0 and 1 that look at GO redundance.
+        If RM = 0, each GO term is present in only 1 isoform, if RM = 1, 
+        each GO term is present in all isoform == all isoform are the same."""
+        if self.number_of_isoforms() < 2:
+            return 1.0
+        if len(self.get_go_term_id()) == 0:
+            return 1.0
+        count_dict = dict()
+        for go_term in self.get_go_term_id():
+            count = -1  # init count at -1 to not count first occurence
+            for isoform in self.transcripts.values():
+                if go_term in isoform.get_go_term_id():
+                    count += 1
+            count_dict[go_term] = count
+        sum_count = sum(count_dict.values())
+        mean_count = sum_count / len(count_dict)
+        rm = mean_count / (self.number_of_isoforms() - 1)
+        return rm
+
+    def diversity_by_pair(self, similarity_function, default_value : float = 1.0) -> float:
+        """For each pair of isoform compute distance.
+        Then compute the mean of all of them.
+        Need a distance function
+        Default value should be 1.0 if we compute a similarity and 0.0 if we compute a distance."""
+        if self.number_of_isoforms() < 2:
+            return default_value
+        else:
+            nb_combinaison = 0
+            sum_distance = 0
+            for isoform1, isoform2 in combinations(self.transcripts, 2):
+                isoform1 = self.transcripts[isoform1]
+                isoform2 = self.transcripts[isoform2]
+
+                sum_distance += similarity_function(isoform1, isoform2)
+                nb_combinaison += 1
+            return sum_distance / nb_combinaison       
+
+    def jaccard_diversity(self) -> float:
+        """Mean of Jaccard index between all isoforms.
+        Jaccard distance is 1 - intersection/union (using GO term)."""
+        return self.diversity_by_pair(jaccard_index)
 
 
 class Transcript:
@@ -123,12 +198,17 @@ class Transcript:
         """kegg is type KEGG"""
         self.keggs.append(kegg)
 
-    def set_seq(self, seq):
+    def set_seq(self, seq : str):
         self.seq = seq
 
-    def set_desc(self, desc, ppv):
+    def set_desc(self, desc : str, ppv):
         self.desc = desc
         self.ppv = float(ppv)
+
+    # Methods
+        
+    def number_of_go_terms(self) -> int:
+        return len(self.gos)
 
 
 class Feature:
@@ -258,6 +338,39 @@ def make_best_single_isoform_annotation(annotation : Annotation):
         best_annotation.add_gene(new_gene)
     return best_annotation
 
+def jaccard_index(isoform1 : Transcript, isoform2 : Transcript) -> float:
+    """ Return Jaccard distance between 2 isoform.
+    Jaccard distance is intersection/union (using GO term)"""
+    go_term1 = set(isoform1.get_go_term_id())
+    go_term2 = set(isoform2.get_go_term_id())
+    intersection = set.intersection(go_term1, go_term2)
+    union = set.union(go_term1, go_term2)
+    if len(union) == 0:
+        return 1.0
+    else:
+        return len(intersection) / len(union)
+    
+def dice_coefficient(isoform1 : Transcript, isoform2 : Transcript) -> float:
+    """Return Sorensen-Dice coefficient"""
+    go_term1 = set(isoform1.get_go_term_id())
+    go_term2 = set(isoform2.get_go_term_id())
+    intersection = set.intersection(go_term1, go_term2)
+    if len(go_term1) + len(go_term2) == 0:
+        return 1.0
+    else:
+        return (2 * len(intersection)) / (len(go_term1) + len(go_term2))
+
+def overlap_coefficient(isoform1 : Transcript, isoform2 : Transcript) -> float:
+    """Return Sorensen-Dice coefficient"""
+    go_term1 = set(isoform1.get_go_term_id())
+    go_term2 = set(isoform2.get_go_term_id())
+    intersection = set.intersection(go_term1, go_term2)
+    if min(len(go_term1), len(go_term2)) == 0:
+        return 1.0
+    else:
+        return len(intersection) / min(len(go_term1), len(go_term2))
+
+ 
 def read_go_graph():
     url = 'http://purl.obolibrary.org/obo/go/go-basic.obo'
     go_graph = read_obo(url, ignore_obsolete=False)
