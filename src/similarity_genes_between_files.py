@@ -25,6 +25,12 @@ parser.add_argument(
 )
 
 parser.add_argument(
+    '-l', '--add-longest',
+    action='store_true', default=None,
+    help='Will add an element for the comparison that is the longest isoform (isoform with the most isoform) from the first file after -i'
+)
+
+parser.add_argument(
     '-b', '--add-best',
     action='store_true', default=None,
     help='Will add an element for the comparison that is the best isoform (isoform with the most isoform) from the first file after -i'
@@ -81,18 +87,27 @@ def main():
     pannzer_outputs = read_pannzer_outputs(args.pannzer_output)
     print()
 
+    if args.add_longest:
+        print('Adding element with longest isoform ...')
+        pannzer_outputs.append(poa.make_longest_single_isoform_annotation(pannzer_outputs[0]))
+        print('Done')
+        print()       
+
     if args.add_best:
         print('Adding element with best isoform ...')
         pannzer_outputs.append(poa.make_best_single_isoform_annotation(pannzer_outputs[0]))
         print('Done')
         print()
     
-    print('Preparing gene set ...')
+    print('Preparing gene set ...\n')
     gene_set = list(pannzer_outputs[0].genes)  # getting genes from PO 1
     for annotation in pannzer_outputs[1:]:  # Keeping genes if also present in other PO
         gene_set = [gene for gene in annotation.genes if gene in gene_set]
     if args.only_multiple_isoform==True:
         gene_set = [gene for gene in gene_set if len(pannzer_outputs[0].genes[gene].transcripts) > 1]
+        print(f'Using {len(gene_set)} multiple-isoform genes\n')
+    else:
+        print(f'Using {len(gene_set)} single-isoform or multiple-isoform genes\n')
     print('Done')
     print()
 

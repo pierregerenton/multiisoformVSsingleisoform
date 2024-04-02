@@ -78,12 +78,13 @@ python3 src/number_genes_with_different_go_term_between_files.py -i data/pannzer
 To get tables of mean gene similarity between files and a table of similarity between each gene for each pair, you can run this command :
 
 ```sh
-python3 ./src/similarity_genes_between_files.py -i git_data/pannzer_output/human.all.nr_off.out git_data/pannzer_output/human.long.nr_off.out git_data/pannzer_output/human.mane.nr_off.out -g ~/software/GOGO/ -fb -o res/human_gene_sim
+python3 ./src/similarity_genes_between_files.py -i data/pannzer_output/human.all.nr_off.out data/pannzer_output/human.long.nr_off.out data/pannzer_output/human.mane.nr_off.out -g ~/Software/GOGO/ -fb -o res/human_gene_sim
 ```
 
 - `-i` : pannzer output as input file (at least 2, or 1 with `-b` option)
 - `-g` : path of GOGO directory
-- `-b` : path of a pannzer output where the best isoform will be kept (and this new element add to the plot)
+- `-l` : extract the longest isoform from the first file after `-i` (and this new element add to the plot)
+- `-b` : extract the best isoform from the first file after `-i` (and this new element add to the plot)
 - `-a` : infer GO term ancestry (longer)
 - `-f` : filter gene_set to have only multiple-isoform gene used for similarity
 - `-o` : name of the output file
