@@ -66,11 +66,11 @@ To get an UpSetPlot of the number of genes which differ in term of GO annotation
 python3 src/number_genes_with_different_go_term_between_files.py -i data/pannzer_output/human.all.nr_off.out data/pannzer_output/human.long.nr_off.out data/pannzer_output/human.mane.nr_off.out -b data/pannzer_output/human.all.nr_off.out -o res/human_gene_count.pdf
 ```
 
-- `-i` : pannzer output as input file (at least 2, or 1 with `-l` `-b` option)
+- `-i` : pannzer output as input file (at least 2, or 1 with `-l` `-b` option) \[MANDATORY\]
 - `-l` : path of a pannzer output where the longest isoform will be extracted (and this new element add to the plot)
 - `-b` : path of a pannzer output where the best isoform will be extracted (and this new element add to the plot)
 - `-a` : infer GO term ancestry (longer)
-- `-o` : name of the output file
+- `-o` : name of the output file \[MANDATORY\]
 
 
 ### Computation of GOGO similarity of genes between files
@@ -81,13 +81,13 @@ To get tables of mean gene similarity between files and a table of similarity be
 python3 ./src/similarity_genes_between_files.py -i data/pannzer_output/human.all.nr_off.out data/pannzer_output/human.long.nr_off.out data/pannzer_output/human.mane.nr_off.out -g ~/Software/GOGO/ -fb -o res/human_gene_sim
 ```
 
-- `-i` : pannzer output as input file (at least 2, or 1 with `-b` option)
-- `-g` : path of GOGO directory
+- `-i` : pannzer output as input file (at least 2, or 1 with `-b` option) \[MANDATORY\]
+- `-g` : path of GOGO directory \[MANDATORY\]
 - `-l` : extract the longest isoform from the first file after `-i` (and this new element add to the plot)
 - `-b` : extract the best isoform from the first file after `-i` (and this new element add to the plot)
 - `-a` : infer GO term ancestry (longer)
 - `-f` : filter gene_set to have only multiple-isoform gene used for similarity
-- `-o` : name of the output file
+- `-o` : name of the output file \[MANDATORY\]
 
 Two files are generated :
 
@@ -104,14 +104,15 @@ Plots generated include :
 - GOGO similarity by number of isoforms
 
 ```sh
-python3 ./src/precise_analysis_of_one_multiisoform_annotation.py -i data/pannzer_output/human.all.nr_off.out -g ~/Software/GOGO/ -t long -f -o src/human_allVSlong_plots.pdf
+python3 ./src/precise_analysis_of_one_multiisoform_annotation.py -i data/pannzer_output/human.all.nr_off.out -g ~/Software/GOGO/ -t long -f -o res/human_allVSlong
 ```
 
-- `-i` : reference pannzer output as input file
-- `-g` : path of GOGO directory
+
+- `-i` : reference pannzer output as input file \[MANDATORY\]
+- `-g` : path of GOGO directory \[MANDATORY\]
 - `-t` : `long` or `best` to choose if the alternative file keep only the longest or the best isoform
 - `-f` : filter gene_set to have only multiple-isoform gene used for similarity
-- `-o` : name of the output file
+- `-o` : name of the output file \[MANDATORY\]
 
 
 ### Make a similarity table for each gene between two pannzer output
@@ -122,12 +123,12 @@ With two Pannzer output, one from a multiple-isoform annotation and the other fr
 python3 ./src/make_metadata_and_similarity_table.py -m data/pannzer_output/human.all.nr_off.out -s data/pannzer_output/human.long.nr_off.out -g ~/Software/GOGO/ -f -o human_allVSlong_sim
 ```
 
-- `-m` : path to a pannzer output as input file (from a multiple-isoform annotation)
-- `-s` : path to a pannzer output as input file (from a single-isoform annotation)
-- `-g` : path of GOGO directory
+- `-m` : path to a pannzer output as input file (from a multiple-isoform annotation) \[MANDATORY\]
+- `-s` : path to a pannzer output as input file (from a single-isoform annotation) \[MANDATORY\]
+- `-g` : path of GOGO directory \[MANDATORY\]
 - `-a` : infer GO term ancestry (longer)
 - `-f` : filter gene_set to have only multiple-isoform gene used for similarity
-- `-o` : name of the output file
+- `-o` : name of the output file \[MANDATORY\]
 
 
 
@@ -139,11 +140,11 @@ From the Pannzer output of a multiple-isoform annotation's proteome, create two 
 python3 ./src/description_table.py -m data/pannzer_output/human.all.nr_off.out -g ~/Software/GOGO/ -o res/exhaustive -lbc data/pannzer_output/human.mane.nr_off.out
 ```
 
-- `-m` : path to a pannzer output as input file (from a multiple-isoform annotation)
-- `-g` : path of GOGO directory
+- `-m` : path to a pannzer output as input file (from a multiple-isoform annotation) \[MANDATORY\]
+- `-g` : path of GOGO directory \[MANDATORY\]
 - `-a` : infer GO term ancestry (longer)
 - `-f` : filter gene_set to have only multiple-isoform gene used for similarity
-- `-o` : name of the output file
+- `-o` : name of the output file \[MANDATORY\]
 - `-c` : path to a pannzer output as input file (from a custom single-isoform annotation) to compute similarity with this one
 - `-l` : to compare similarity with the longest isoform
 - `-b` : to compare similarity with the beest isoform (isoform with the highest number of GO terms)
@@ -214,18 +215,18 @@ python3 ./src/go_enrichment_analysis.py -i res/exhaustive.similarity.txt --bp_co
         --mf_column MF_similarity_longest --bp_thresold 0.9 --ensembl2ncbi data/gene2ensembl.gz --go_dag data/go-basic.obo --gene2go data/gene2go -o res/human_allVSlong
 ```
 
-- `-i` : TSV table with at least a column for each BP, CC, MF similarity and one for gene ID
+- `-i` : TSV table with at least a column for each BP, CC, MF similarity and one for gene ID \[MANDATORY\]
 - `--bp_column` : Name of the column with BP similarity (default : BP_similarity)
 - `--bp_thresold` : Maximum BP similarity to keep a gene list to perform the enrichment (default : 1)
 - `--cc_column` : Name of the column with CC similarity (default : CC_similarity)
 - `--cc_thresold` : Maximum CC similarity to keep a gene list to perform the enrichment (default : 1)
 - `--mf_column` : Name of the column with MF similarity (default : MF_similarity)
 - `--mf_thresold` : Maximum MF similarity to keep a gene list to perform the enrichment (default : 1)
-- `--ensembl2ncbi` : path of gene2ensembl.gz file from NCBI
-- `--go_dag` : path of go-basic.obo file
-- `--gene2go` : path of gene2go UNZIP file from NCBI
+- `--ensembl2ncbi` : path of gene2ensembl.gz file from NCBI \[MANDATORY\]
+- `--go_dag` : path of go-basic.obo file \[MANDATORY\]
+- `--gene2go` : path of gene2go UNZIP file from NCBI \[MANDATORY\]
 - `--taxid` : NCBI TaxID of the studied species (default : 9606 for human)
-- `-o` : Name of the output file
+- `-o` : Name of the output file \[MANDATORY\]
 
 Four files are generated :
 

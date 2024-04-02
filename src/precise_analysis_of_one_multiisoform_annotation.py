@@ -45,7 +45,7 @@ parser.add_argument(
 )
 
 
-args = parser.parse_args()
+args : argparse.Namespace = parser.parse_args()
 
 
 
@@ -69,12 +69,13 @@ def main():
     print('Done\n')
 
 
-
-    print('Preparing gene set ...')
+    print('Preparing gene set ...\n')
     gene_set = list(reference_annotation.genes)
     if args.only_multiple_isoform==True:
         gene_set = [gene for gene in gene_set if len(reference_annotation.genes[gene].transcripts) > 1]
-
+        print(f'Using {len(gene_set)} multiple-isoform genes\n')
+    else:
+        print(f'Using {len(gene_set)} single-isoform or multiple-isoform genes\n')
     print('Done')
     print()
 
@@ -235,12 +236,24 @@ def main():
     pyplot.ylabel("Number of isoforms")
 
 
-    with PdfPages(args.output_name) as pdf:
+    with PdfPages(args.output_name + '.plots.pdf') as pdf:
         for fig in figs:
             pdf.savefig(fig, bbox_inches='tight') 
 
     print('Done')
     print()
+
+    print('Writing data ...')
+
+    with open(args.output_name + '.data.tsv', 'w') as tsv:
+        tsv.write('GENE_ID\tBP_SIMILARITY\tCC_SIMILARITY\tMF_SIMILARITY\tSHUFFLE_BP_SIM\tSHUFFLE_CC_SIM\tSHUFFLE_MF_SIM\n')
+        for gene in similarity_expected:
+            line = gene + '\t' + similarity_observed[gene]['BP'] + '\t' + similarity_observed[gene]['CC'] + '\t' + similarity_observed[gene]['MF'] + '\t' + similarity_expected[gene]['BP'] + '\t' + similarity_expected[gene]['CC'] + '\t' + similarity_expected[gene]['MF'] + '\n'
+            tsv.write(line)
+
+
+    print('Done')
+    print()   
 
 
 if __name__=="__main__":

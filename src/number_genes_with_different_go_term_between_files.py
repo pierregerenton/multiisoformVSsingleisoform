@@ -22,7 +22,7 @@ parser.add_argument(
 parser.add_argument(
     '-l', '--add-longest',
     type=str, metavar='PANZZER_OUTPUT', default=None,
-    help='Will add an element for the comparison that is the best isoform (isoform with the most isoform) from the file after -b'
+    help='Will add an element for the comparison that is the longest isoform (isoform with the most isoform) from the file after -b'
 )
 
 parser.add_argument(
