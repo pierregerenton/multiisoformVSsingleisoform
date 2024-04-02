@@ -115,23 +115,6 @@ python3 ./src/precise_analysis_of_one_multiisoform_annotation.py -i data/pannzer
 - `-o` : name of the output file \[MANDATORY\]
 
 
-### Make a similarity table for each gene between two pannzer output
-
-With two Pannzer output, one from a multiple-isoform annotation and the other from a single-isoform annotation, a table with the similarity for each gene between files is written by this script (with the number of coding isoform for the gene) :
-
-```sh
-python3 ./src/make_metadata_and_similarity_table.py -m data/pannzer_output/human.all.nr_off.out -s data/pannzer_output/human.long.nr_off.out -g ~/Software/GOGO/ -f -o human_allVSlong_sim
-```
-
-- `-m` : path to a pannzer output as input file (from a multiple-isoform annotation) \[MANDATORY\]
-- `-s` : path to a pannzer output as input file (from a single-isoform annotation) \[MANDATORY\]
-- `-g` : path of GOGO directory \[MANDATORY\]
-- `-a` : infer GO term ancestry (longer)
-- `-f` : filter gene_set to have only multiple-isoform gene used for similarity
-- `-o` : name of the output file \[MANDATORY\]
-
-
-
 ### Write exhaustive data table with metadata and similarity based on a multiple-isoform annotation
 
 From the Pannzer output of a multiple-isoform annotation's proteome, create two tables with metadata (parsing of the annotation) and optionally similarity table.
