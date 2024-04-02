@@ -20,6 +20,12 @@ parser.add_argument(
 )
 
 parser.add_argument(
+    '-l', '--add-longest',
+    type=str, metavar='PANZZER_OUTPUT', default=None,
+    help='Will add an element for the comparison that is the best isoform (isoform with the most isoform) from the file after -b'
+)
+
+parser.add_argument(
     '-b', '--add-best',
     type=str, metavar='PANZZER_OUTPUT', default=None,
     help='Will add an element for the comparison that is the best isoform (isoform with the most isoform) from the file after -b'
@@ -44,6 +50,8 @@ args = parser.parse_args()
 
 def check_number_args(args):
     c = len(args.pannzer_output)
+    if args.add_longest is not None:
+        c += 1    
     if args.add_best is not None:
         c += 1
     if c < 2:
@@ -60,6 +68,14 @@ def read_pannzer_outputs(list_path):
     print("Done")
     return list_annotation
 
+def read_longest(path):
+    print("Adding longest isoform annotation ...")
+    name = basename(path).strip('.out')
+    annotation = poa.parse_pannzer_annotation(path, name)
+    longest_annotation = poa.make_longest_single_isoform_annotation(annotation)
+    print("Done")
+    return longest_annotation
+
 def read_best(path):
     print("Adding best isoform annotation ...")
     name = basename(path).strip('.out')
@@ -75,6 +91,10 @@ def main():
 
     pannzer_outputs = read_pannzer_outputs(args.pannzer_output)
     print()
+
+    if args.add_longest is not None:
+        pannzer_outputs.append(read_longest(args.add_longest))
+        print()
 
     if args.add_best is not None:
         pannzer_outputs.append(read_best(args.add_best))

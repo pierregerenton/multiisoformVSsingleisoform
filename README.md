@@ -72,8 +72,6 @@ python3 src/number_genes_with_different_go_term_between_files.py -i data/pannzer
 - `-o` : name of the output file
 
 
-python3 ./similarity_genes_between_files.py -i git_data/pannzer_output/human.all.nr_off.out git_data/pannzer_output/human.long.nr_off.out git_data/pannzer_output/human.mane.nr_off.out -g ~/software/GOGO/ -fb -o human_gene_sim
-
 ### Computation of GOGO similarity of genes between files
 
 To get tables of mean gene similarity between files and a table of similarity between each gene for each pair, you can run this command :
