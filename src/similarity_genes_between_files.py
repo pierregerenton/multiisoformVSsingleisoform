@@ -111,7 +111,7 @@ def main():
     print('Done')
     print()
 
-    argument = {'gene_set':gene_set}
+    argument : dict[str] = {'gene_set' : gene_set, 'gogo_file' : 'sgbf.'+basename(args.pannzer_output[0]).strip('.out')}
     fun = poa.gogo_similarity_between_annotation
 
     if args.ancestry: 
