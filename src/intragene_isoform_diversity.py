@@ -5,9 +5,8 @@ import argparse
 
 
 parser = argparse.ArgumentParser(
-                    prog='precise_analysis_of_one_multiisoform_annotation',
-                    description='Print a lot of plot when comparing a reference annotation\
-                        with an alternative single-isoform annotation',
+                    prog='intragene_isoform_diversity',
+                    description='Compute diversity between all isoform of a gene',
                     epilog='For more information, contact pierre.gerenton@crg.eu')
 
 

@@ -30,17 +30,30 @@ An example with common `bash` command :
 zcat gencode.v45.annotation.gff3.gz | grep -E '^chr21'
 ```
 
-## Special annotation
+### Longest-isoform annotation
 
 To compare annotation, an another annotation was created by keeping the longest isoform of each gene. It was done with `AGAT` :
 
-```
+```sh
 agat_sp_keep_longest_isoform.pl -gff [human/mouse].gff3 -o [human/mouse].longest_isoform.gff3
 ```
 
+You can also skip this step and use the `-l` option in script to extract the longest isoform from the full annotation. Results can vary when multiple isoform have the same length.
+
+### MANE annotation
+
 Also, the MANE annotation is use for the human genome. You can download it in the [NCBI ftp site](https://ftp.ncbi.nlm.nih.gov/refseq/MANE/MANE_human/release_1.2/) or by clicking [here (release 1.2)](https://ftp.ncbi.nlm.nih.gov/refseq/MANE/MANE_human/release_1.2/MANE.GRCh38.v1.2.ensembl_genomic.gff.gz).
 
-## Extracting proteome
+
+## Keeping protein-coding features, no readthrough gene and no redundant transcript
+
+To remove non protein-coding features, readthrough gene and redundant transcript ( transcript with the same CDS coordinates), you can run this script
+
+```sh
+./src/python3 src/extract_protein_coding_features_from_gff.py -i data/[human/mouse].gff3 -o data/[human/mouse].protein_coding.no_readthrough.no_redundant_transcript.gff3 
+```
+
+## Extracting proteomegit add 
 
 From each annotation, a proteome can be extract. The proteome is a multi-fasta file where each sequence is extracted from the reference genome according to the coordinates of the CDS of a coding transcript in an annotation.
 
