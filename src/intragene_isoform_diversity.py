@@ -2,7 +2,7 @@ import pannzer_out_api as poa
 import statistics as stats
 import pandas as pd
 import argparse
-from os import basename
+from os.path import basename
 
 
 parser = argparse.ArgumentParser(
