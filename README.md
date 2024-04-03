@@ -286,3 +286,16 @@ More information in the paper :
 Two files are generated :
 - `output.data.tsv` : measurement for each gene
 - `output.summary.tsv` : descriptive statistics for each measurement
+
+
+#### Exploring the results interactively with a Dash app
+
+You can explore the table with interactivity (filter table, remove column, export to csv and sort) with a Dash app if you run :
+
+```sh
+python3 intragene_isoform_diversity_interactive.py -d res/isoforms_diversity
+```
+
+- `-d` : prefix path to the data produced by the scripts `intragene_isoform_diversity` (do not write the `.data.tsv` and `.summary.tsv`) \[MANDATORY\]
+
+This app use the implemented filter features for datatable. To filter a `int` column, you can use `<` or `>` before a number of get all row where the value in inferior/superior to your threshold in the current columns. 
