@@ -56,7 +56,7 @@ def main():
     data['Overlap coefficient'] = data['Gene'].apply(annotation.get_gene).apply(poa.Gene.diversity_by_pair, similarity_function=poa.overlap_coefficient)
     data['Redundance metric'] = data['Gene'].apply(annotation.get_gene).apply(poa.Gene.go_redundance_metric)
     data['Stdev number GO term'] = data['Gene'].apply(annotation.get_gene).apply(poa.Gene.stdev_number_of_go_by_isoform)
-    similarity = data['Gene'].apply(annotation.get_gene).apply(poa.Gene.intra_gene_gogo_similarity, gogo_dir=args.gogo_dir, gogo_file=...)
+    similarity = data['Gene'].apply(annotation.get_gene).apply(poa.Gene.intra_gene_gogo_similarity, gogo_dir=args.gogo_dir, gogo_file='iig.'+basename(args.pannzer_output).strip('.out'))
     data['BP similarity'] = similarity.apply(lambda x : x[0])
     data['CC similarity'] = similarity.apply(lambda x : x[1])
     data['MF similarity'] = similarity.apply(lambda x : x[2])
