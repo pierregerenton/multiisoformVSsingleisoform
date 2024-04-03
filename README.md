@@ -225,6 +225,11 @@ To evaluate isoforms diversity for each gene with different metrics, you should 
 python3 src/intragene_isoform_diversity.py -i data/pannzer_output/human.all.nr_off.out -o res/isoforms_diversity
 ```
 
+- `-i` : path to a pannzer output as input file (from a multiple-isoform annotation) \[MANDATORY\]
+- `-g` : path of GOGO directory \[MANDATORY\]
+- `-o` : name of the output file \[MANDATORY\]
+
+
 #### Metrics computed in all isoform :
 
 Let $G$, the set, a set of isoform defined as :
@@ -252,7 +257,7 @@ Let $count(T_i)$ the number of isoform where $T_i$ is present.
 $$r = \frac{1}{n-1} \sum_{i=1}^ {n_o}(count(T_i)-1)$$
 
 
-#### Metrics computed in all isoform :
+#### Metrics computed for each pair of isoform :
 Certain metrics were calculated for each pair of isoforms before all the values were averaged.
 
 ***Jaccard index***\
@@ -271,6 +276,11 @@ $$D(I_1, I_2) = \frac{2|I_1 \cap I_2|}{|I_1| + |I_2|}$$
 If $min(|I_1|,|I_2|) = 0$, then $overlap(I_1, I_2) = 1$, else
 
 $$overlap(I_1, I_2) = \frac{|I_1 \cap I_2|}{min(|I_1|,|I_2|)}$$
+
+***BP, CC and MF GOGO similarity***\
+Semantic similarity computed between GO terms of each isoform.
+More information in the paper :
+`Zhao, C. and Wang, Z. (2018) GOGO: An improved algorithm to measure the semantic similarity between gene ontology terms. Scientific Reports, 8, 15107; doi:10.1038/s41598-018-33219-y.`
 
 
 Two files are generated :

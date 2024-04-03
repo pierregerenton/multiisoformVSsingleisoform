@@ -2,6 +2,7 @@ import pannzer_out_api as poa
 import statistics as stats
 import pandas as pd
 import argparse
+from os import basename
 
 
 parser = argparse.ArgumentParser(
@@ -16,6 +17,11 @@ parser.add_argument(
     help='Reference multiple isoform annotation'
 )
 
+parser.add_argument(
+    '-g', '--gogo-dir',
+    type=str, required=True,
+    help='Path of the GOGO directory'
+)
 
 parser.add_argument(
     '-o', '--output-name',
@@ -50,6 +56,10 @@ def main():
     data['Overlap coefficient'] = data['Gene'].apply(annotation.get_gene).apply(poa.Gene.diversity_by_pair, similarity_function=poa.overlap_coefficient)
     data['Redundance metric'] = data['Gene'].apply(annotation.get_gene).apply(poa.Gene.go_redundance_metric)
     data['Stdev number GO term'] = data['Gene'].apply(annotation.get_gene).apply(poa.Gene.stdev_number_of_go_by_isoform)
+    similarity = data['Gene'].apply(annotation.get_gene).apply(poa.Gene.intra_gene_gogo_similarity, gogo_dir=args.gogo_dir, gogo_name=...)
+    data['BP similarity'] = similarity.apply(lambda x : x[0])
+    data['CC similarity'] = similarity.apply(lambda x : x[1])
+    data['MF similarity'] = similarity.apply(lambda x : x[2])
 
     summary = pd.DataFrame()
     summary['Metrics'] = data.columns[1:]

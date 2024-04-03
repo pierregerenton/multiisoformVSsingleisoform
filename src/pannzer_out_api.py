@@ -158,18 +158,79 @@ class Gene:
         """Mean of Jaccard index between all isoforms.
         Jaccard distance is 1 - intersection/union (using GO term)."""
         return self.diversity_by_pair(jaccard_index)
+    
+    def intra_gene_gogo_similarity(self, gogo_dir : str, gogo_file : str = "gogo") -> tuple[float, float, float]:
+        """
+        Return a dict of key = transcript_id_1_X_transcript_id_2 and value = dict(ontology, similary)
+        For example, sim['ENST0001_X_ENST0002']['BP'] is the similarity of the BP GO term between both ENST0001 and ENST0002 transcript(for the two input annotation)
+        """
+        # check number of isoform
 
+        if len(self.transcripts) < 2:
+            return (1, 1, 1)
+        
+        bp_sum : float = 0
+        cc_sum : float = 0
+        mf_sum : float = 0
+        nb_pair : int = 0
+        with open(f"{gogo_file}.gogo_input.txt", 'w') as input_file:
+            for transcript1, transcript2 in combinations(self.transcripts, 2):
+                nb_pair += 1
+                line_p1 = transcript1 + f"{nb_pair} "
+                line_p2 = "; " + transcript2 + f"{nb_pair} "
+                bp_t1 = self[transcript1].get_go_term_id('BP')
+                bp_t2 = self[transcript2].get_go_term_id('BP')
+                cc_t1 = self[transcript1].get_go_term_id('CC')
+                cc_t2 = self[transcript2].get_go_term_id('CC')
+                mf_t1 = self[transcript1].get_go_term_id('MF')
+                mf_t2 = self[transcript2].get_go_term_id('MF')
+
+                if set(bp_t1) == set(bp_t2):  # include both length == 0
+                    bp_sum += 1
+                elif len(bp_t1) == 0 or len(bp_t2) == 0:
+                    bp_sum += 0
+                else:
+                    line_p1 += ' '.join(bp_t1) + ' '
+                    line_p2 += ' '.join(bp_t2) + ' '
+                
+                if set(cc_t1) == set(cc_t2):  # include both length == 0
+                    cc_sum += 1
+                elif len(cc_t1) == 0 or len(cc_t2) == 0:
+                    cc_sum += 0
+                else:
+                    line_p1 += ' '.join(cc_t1) + ' '
+                    line_p2 += ' '.join(cc_t2) + ' '
+
+                if set(mf_t1) == set(mf_t2):  # include both length == 0
+                    mf_sum += 1
+                elif len(mf_t1) == 0 or len(mf_t2) == 0:
+                    mf_sum += 0
+                else:
+                    line_p1 += ' '.join(mf_t1) + ' '
+                    line_p2 += ' '.join(mf_t2) + ' '
+                
+                input_file.write(line_p1 + line_p2 +';\n')
+
+        run_gogo_script(gogo_dir, gogo_file)
+
+        with open(f"{gogo_file}.gogo_output.txt") as output_file:
+            for line in output_file:
+                line = line.strip().split(' ')
+                bp_sum += 0 if line[-5] == 'NA' else float(line[-5])
+                cc_sum += 0 if line[-3] == 'NA' else float(line[-3])
+                mf_sum += 0 if line[-1] == 'NA' else float(line[-1])
+        return bp_sum/nb_pair, cc_sum/nb_pair, mf_sum/nb_pair
 
 class Transcript:
     """Represent a transcripts."""
 
     def __init__(self, id) -> None:
-        self.id = id
-        self.gos = list()
-        self.keggs = list()
-        self.ecs = list()
-        self.seq = None
-        self.desc = None  # description
+        self.id : str = id
+        self.gos : list[GO] = list()
+        self.keggs : list[KEGG] = list()
+        self.ecs : list[EC] = list()
+        self.seq : str = None
+        self.desc : str = None  # description
         self.ppv = None
 
     def __str__(self) -> str:
@@ -180,9 +241,12 @@ class Transcript:
     
     # Getters
 
-    def get_go_term_id(self, threesold=0) -> list[str]:
+    def get_go_term_id(self, namespace :str = 'all', threesold : float = 0) -> list[str]:
         """Return a list of ids of the GO term assigned to this transcript."""
-        return [go.id for go in self.gos if go.ppv > threesold]
+        if namespace == 'all':
+            return [go.id for go in self.gos if go.ppv > threesold]
+        else:
+            return [go.id for go in self.gos if (go.ppv > threesold and go.namespace == namespace)]
 
     # Setters
         
@@ -227,9 +291,9 @@ class Feature:
 
 class GO(Feature):
 
-    def __init__(self, id, desc, ppv, ontology) -> None:
-        """ontology is BP, MF, CC"""
-        self.ontology = ontology
+    def __init__(self, id, desc, ppv, namespace) -> None:
+        """namespace is BP, MF, CC"""
+        self.namespace = namespace
         super().__init__(id, desc, ppv)
 
 class KEGG(Feature):
@@ -424,6 +488,48 @@ def genes_with_diff_go_terms_with_hierarchy(annotation_1, annotation_2, go_graph
             gene_list.append(gene)
     return gene_list
 
+def run_gogo_script(gogo_dir : str, gogo_file : str) -> None:
+    os.system(f"""
+        CURDIR=$(pwd)
+        cd {gogo_dir}
+        perl gene_pair_comb.pl $CURDIR/{gogo_file}.gogo_input.txt $CURDIR/{gogo_file}.gogo_output.txt 
+        cd $CURDIR
+        """)   
+
+def gogo_similarity_between_transcript(transcript_1 : Transcript, transcript_2 : Transcript, gogo_dir : str, gogo_file : str = "gogo") -> tuple[float, float, float]:
+    bp_sim = gogo_similarity_between_set_from_the_same_namespace(set(transcript_1.get_go_term_id(namespace='BP')), set(transcript_2.get_go_term_id(namespace='BP')), gogo_dir, gogo_file)
+    cc_sim = gogo_similarity_between_set_from_the_same_namespace(set(transcript_1.get_go_term_id(namespace='CC')), set(transcript_2.get_go_term_id(namespace='CC')), gogo_dir, gogo_file)
+    mf_sim = gogo_similarity_between_set_from_the_same_namespace(set(transcript_1.get_go_term_id(namespace='MF')), set(transcript_2.get_go_term_id(namespace='MF')), gogo_dir, gogo_file)
+    return bp_sim, cc_sim, mf_sim
+
+def gogo_similarity_between_set_from_the_same_namespace(set_1 : set[str], set_2 : set[str], gogo_dir : str, gogo_file : str = "gogo") -> float:
+    """
+    Given 2 set of GO term, compute the similarity with GOGO
+    BOTH SET NEED TO BE FROM THE SAME NAMESPACE (BP, CC or MF)
+    """
+    if set_1 == set_2:  # include len(set_1) == 0 and len(set_2) == 0
+        return 1
+    if len(set_1) == 0 or len(set_2) == 0:
+        return 0
+    
+    # write input file for the bash script
+    with open(f"{gogo_file}.gogo_input.txt", 'w') as input_file:
+        line = 'set_1 '
+        line += ' '.join(list(set_1)) + "; "
+        line += 'set2 '
+        line += ' '.join(list(set_2)) + ";"
+        input_file.write(line) 
+
+    # running bash script
+    run_gogo_script(gogo_dir, gogo_file)
+    
+    # parsing output script
+    with open(f"{gogo_file}.gogo_output.txt") as output_file:
+        line = output_file.readline()
+        similarity = line.split(';')[-1].replace('BPO', '').replace('CCO', '').replace('MFO', '').replace('NA', '').strip()
+
+    return float(similarity)
+
 
 def gogo_similarity_between_annotation(annotatation_1 : Annotation, annotation_2 : Annotation, gogo_dir:str, gene_set = None, gogo_file : str = "gogo") -> dict[str, dict[str, str]]:
     """
@@ -444,12 +550,7 @@ def gogo_similarity_between_annotation(annotatation_1 : Annotation, annotation_2
             input_file.write(line)  # gene1 GO:0001 GO:0002; gene2 GO:0001 GO:0002
 
     # running bash script
-    os.system(f"""
-              CURDIR=$(pwd)
-              cd {gogo_dir}
-              perl gene_pair_comb.pl $CURDIR/{gogo_file}.gogo_input.txt $CURDIR/{gogo_file}.gogo_output.txt 
-              cd $CURDIR
-              """)
+    run_gogo_script(gogo_dir, gogo_file)
     
     # parsing output script
     similarity = dict()
@@ -515,12 +616,7 @@ def gogo_similarity_between_annotation_with_hierarchy(annotatation_1 : Annotatio
             input_file.write(line)  # gene1 GO:0001 GO:0002; gene2 GO:0001 GO:0002
 
     # running bash script
-    os.system(f"""
-              CURDIR=$(pwd)
-              cd {gogo_dir}
-              perl gene_pair_comb.pl $CURDIR/{gogo_file}.gogo_input.txt $CURDIR/{gogo_file}.gogo_output.txt 
-              cd $CURDIR
-              """)
+    run_gogo_script(gogo_dir, gogo_file)
     
     # parsing output script
     similarity = dict()
