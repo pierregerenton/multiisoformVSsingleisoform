@@ -53,12 +53,13 @@ To remove non protein-coding features, readthrough gene and redundant transcript
 ./src/python3 src/extract_protein_coding_features_from_gff.py -i data/[human/mouse].gff3 -o data/[human/mouse].protein_coding.no_readthrough.no_redundant_transcript.gff3 
 ```
 
-## Extracting proteomegit add 
+## Extracting proteome
 
 From each annotation, a proteome can be extract. The proteome is a multi-fasta file where each sequence is extracted from the reference genome according to the coordinates of the CDS of a coding transcript in an annotation.
 
 With `AGAT`, you can do that by running :
-```
+
+```sh
 agat_sp_extract_sequences.pl -g [human/mouse].[all/long/mane].gff3 -f [human/mouse].fa -t cds -p -o protein.[human/mouse].[all/long/mane].fa
 ```
 

@@ -63,7 +63,7 @@ pip install -r requierement.txt
 To get an UpSetPlot of the number of genes which differ in term of GO annotation between input, you can run this command :
 
 ```sh
-python3 src/number_genes_with_different_go_term_between_files.py -i data/pannzer_output/human.all.nr_off.out data/pannzer_output/human.long.nr_off.out data/pannzer_output/human.mane.nr_off.out -b data/pannzer_output/human.all.nr_off.out -o res/human_gene_count.pdf
+python3 src/number_genes_with_different_go_term_between_files.py -i data/pannzer_output/human.nr_off.pc.out data/pannzer_output/human.nr_off.mane.out -l data/pannzer_output/human.nr_off.pc.out -b data/pannzer_output/human.nr_off.pc.out -o res/human.number_genes_with_different_go_term_between_files.pdf
 ```
 
 - `-i` : pannzer output as input file (at least 2, or 1 with `-l` `-b` option) \[MANDATORY\]
@@ -78,7 +78,7 @@ python3 src/number_genes_with_different_go_term_between_files.py -i data/pannzer
 To get tables of mean gene similarity between files and a table of similarity between each gene for each pair, you can run this command :
 
 ```sh
-python3 ./src/similarity_genes_between_files.py -i data/pannzer_output/human.all.nr_off.out data/pannzer_output/human.long.nr_off.out data/pannzer_output/human.mane.nr_off.out -g ~/Software/GOGO/ -fb -o res/human_gene_sim
+python3 src/similarity_genes_between_files.py -i data/pannzer_output/human.nr_off.pc.out data/pannzer_output/human.nr_off.mane.out -flb -g ~/Software/GOGO/ -o res/human.similarity_genes_between_files
 ```
 
 - `-i` : pannzer output as input file (at least 2, or 1 with `-b` option) \[MANDATORY\]
@@ -104,7 +104,7 @@ Plots generated include :
 - GOGO similarity by number of isoforms
 
 ```sh
-python3 ./src/precise_analysis_of_one_multiisoform_annotation.py -i data/pannzer_output/human.all.nr_off.out -g ~/Software/GOGO/ -t long -f -o res/human_allVSlong
+python3 src/precise_analysis_of_one_multiisoform_annotation.py -i data/pannzer_output/human.nr_off.pc.out -f -t long -g ~/Software/GOGO/ -o res/human.precise_analysis_of_one_multiisoform_annotation
 ```
 
 
@@ -120,7 +120,7 @@ python3 ./src/precise_analysis_of_one_multiisoform_annotation.py -i data/pannzer
 From the Pannzer output of a multiple-isoform annotation's proteome, create two tables with metadata (parsing of the annotation) and optionally similarity table.
 
 ```sh
-python3 ./src/description_table.py -m data/pannzer_output/human.all.nr_off.out -g ~/Software/GOGO/ -o res/exhaustive -lbc data/pannzer_output/human.mane.nr_off.out
+python3 src/description_table.py -m data/pannzer_output/human.nr_off.pc.out -lbc data/pannzer_output/human.nr_off.mane.out -g ~/Software/GOGO/ -o res/human.description_table
 ```
 
 - `-m` : path to a pannzer output as input file (from a multiple-isoform annotation) \[MANDATORY\]
@@ -194,8 +194,8 @@ Two files will be generated :
 To find if the subset of gene with low similarity is enriched in some terms, you can run :
 
 ```sh
-python3 ./src/go_enrichment_analysis.py -i res/exhaustive.similarity.txt --bp_column BP_similarity_longest --cc_column CC_similarity_longest \
-        --mf_column MF_similarity_longest --bp_thresold 0.9 --ensembl2ncbi data/gene2ensembl.gz --go_dag data/go-basic.obo --gene2go data/gene2go -o res/human_allVSlong
+python3 src/go_enrichment_analysis.py -i res/human.description_table.similarity.txt --bp_column BP_similarity_longest --cc_column CC_similarity_longest \
+        --mf_column MF_similarity_longest --bp_thresold 0.9 --ensembl2ncbi data/gene2ensembl.gz --go_dag data/go-basic.obo --gene2go data/gene2go -o res/human.go_enrichment_analysis
 ```
 
 - `-i` : TSV table with at least a column for each BP, CC, MF similarity and one for gene ID \[MANDATORY\]
@@ -222,7 +222,7 @@ Four files are generated :
 To evaluate isoforms diversity for each gene with different metrics, you should run :
 
 ```sh
-python3 src/intragene_isoform_diversity.py -i data/pannzer_output/human.all.nr_off.out -o res/isoforms_diversity
+python3 src/intragene_isoform_diversity.py -i data/pannzer_output/human.nr_off.pc.out -g ~/Software/GOGO/ -o res/human.intragene_isoform_diversity
 ```
 
 - `-i` : path to a pannzer output as input file (from a multiple-isoform annotation) \[MANDATORY\]
@@ -244,7 +244,7 @@ $$n_{isoform} = |G|$$
 ***Standard deviation of the number of GO term***
 $$\sigma_{m_i} = \sqrt{\frac{1}{n}\sum_{i=1}^{n}{(m_i-\bar{m_i} )^2}}$$
 
-***Redudancy metric***\
+***Redundancy metric***\
 This metrics was designed to have an idea of the number of times a GO term appear in the genes.
 For each unique GO term, his number of reoccurence is count ($0$ if it appear only in $1$ isoform, and $n-1$ if it appear in all isoform). Then, the mean of this counting is done to have the mean count of reoccurence. Finally, this count is divided by the $n-1$.
 If $r$ is close to $1$, that's means that all GO terms are present in all isoforms, and if $r$ is close to $0$, each isoform is different.
@@ -293,7 +293,7 @@ Two files are generated :
 You can explore the table with interactivity (filter table, remove column, export to csv and sort) with a Dash app if you run :
 
 ```sh
-python3 intragene_isoform_diversity_interactive.py -d res/isoforms_diversity
+python3 src/intragene_isoform_diversity_interactive.py -d res/human.intragene_isoform_diversity
 ```
 
 - `-d` : prefix path to the data produced by the scripts `intragene_isoform_diversity` (do not write the `.data.tsv` and `.summary.tsv`) \[MANDATORY\]
