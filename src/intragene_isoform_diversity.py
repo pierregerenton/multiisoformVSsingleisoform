@@ -58,7 +58,7 @@ def main():
     data['Overlap coefficient'] = data['Gene'].apply(annotation.get_gene).apply(poa.Gene.diversity_by_pair, similarity_function=poa.overlap_coefficient)
     data['Redundance metric'] = data['Gene'].apply(annotation.get_gene).apply(poa.Gene.go_redundance_metric)
     data['Stdev number GO term'] = data['Gene'].apply(annotation.get_gene).apply(poa.Gene.stdev_number_of_go_by_isoform)
-    similarity = data['Gene'].apply(annotation.get_gene).apply(poa.Gene.intra_gene_gogo_similarity, gogo_dir=args.gogo_dir, gogo_file='iig.'+basename(args.pannzer_output).strip('.out'))
+    similarity = data['Gene'].apply(annotation.get_gene).apply(poa.Gene.intra_gene_gogo_similarity, gogo_dir=args.gogo_dir, gogo_file='iig.observed.'+basename(args.pannzer_output).strip('.out'))
     data['BP similarity'] = similarity.apply(lambda x : x[0])
     data['CC similarity'] = similarity.apply(lambda x : x[1])
     data['MF similarity'] = similarity.apply(lambda x : x[2])
@@ -67,7 +67,7 @@ def main():
 
     print('Computing diversity for shuffle data ...')
 
-    reassignment = pd.reassignmentFrame()
+    reassignment = pd.DataFrame()
     reassignment['Gene'] = shuffle.genes.keys()
     reassignment['Type'] = "Expected"
     reassignment['Number of isoform'] = reassignment['Gene'].apply(shuffle.get_gene).apply(poa.Gene.number_of_isoforms)
@@ -76,7 +76,7 @@ def main():
     reassignment['Overlap coefficient'] = reassignment['Gene'].apply(shuffle.get_gene).apply(poa.Gene.diversity_by_pair, similarity_function=poa.overlap_coefficient)
     reassignment['Redundance metric'] = reassignment['Gene'].apply(shuffle.get_gene).apply(poa.Gene.go_redundance_metric)
     reassignment['Stdev number GO term'] = reassignment['Gene'].apply(shuffle.get_gene).apply(poa.Gene.stdev_number_of_go_by_isoform)
-    similarity = reassignment['Gene'].apply(shuffle.get_gene).apply(poa.Gene.intra_gene_gogo_similarity, gogo_dir=args.gogo_dir, gogo_file='iig.'+basename(args.pannzer_output).strip('.out'))
+    similarity = reassignment['Gene'].apply(shuffle.get_gene).apply(poa.Gene.intra_gene_gogo_similarity, gogo_dir=args.gogo_dir, gogo_file='iig.expected.'+basename(args.pannzer_output).strip('.out'))
     reassignment['BP similarity'] = similarity.apply(lambda x : x[0])
     reassignment['CC similarity'] = similarity.apply(lambda x : x[1])
     reassignment['MF similarity'] = similarity.apply(lambda x : x[2])
