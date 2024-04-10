@@ -239,7 +239,7 @@ $$ I_i = \{ T_{i1}, T_{i2}, \ldots, T_{im_i} \} $$
 
 
 ***Number of isoform : number of isoform***
-$$n_{isoform} = |G|$$
+$$n_{isoform} = n = |G|$$
 
 ***Standard deviation of the number of GO term***
 $$\sigma_{m_i} = \sqrt{\frac{1}{n}\sum_{i=1}^{n}{(m_i-\bar{m_i} )^2}}$$
@@ -254,7 +254,9 @@ If there is 1 isoform, the redudancy metric is set to $1$.
 Let $O$ be the set of all unique GO terms defined as :
 $$O = \bigcup_{i=1}^n I_i = \{ T_{1}, T_{2}, \ldots, T_{n_o} \}$$
 Let $count(T_i)$ the number of isoform where $T_i$ is present.
-$$r = \frac{1}{n-1} \sum_{i=1}^ {n_o}(count(T_i)-1)$$
+$$rdd(T_i) = \frac{1}{n-1} \sum_{i=1}^ {n_o}(count(T_i)-1)$$
+
+We then return the mean $\overline{rdd}$.
 
 
 #### Metrics computed for each pair of isoform :
