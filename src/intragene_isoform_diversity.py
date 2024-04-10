@@ -84,7 +84,7 @@ def main():
     print('Done\n')
 
     summary = pd.DataFrame()
-    summary['Metrics'] = data.columns[1:]
+    summary['Metrics'] = data.columns[2:]
     summary['Mean (observed)'] = summary['Metrics'].apply(data.get).apply(stats.fmean, axis = 1)
     summary['Mean (expected)'] = summary['Metrics'].apply(reassignment.get).apply(stats.fmean, axis = 1)
     summary['Harmonic Mean (observed)'] = summary['Metrics'].apply(data.get).apply(stats.harmonic_mean, axis = 1)
