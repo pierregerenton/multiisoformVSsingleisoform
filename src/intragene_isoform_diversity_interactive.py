@@ -28,12 +28,12 @@ $$G = \{ I_1, I_2, \ldots, I_n \}$$
                              
 where each $I_i$ is a set of multiple GO terms defined as :
                              
-$$I_i = \{ T_{i1}, T_{i2}, \ldots, T_{im_i} \}$$
+$$ I_i = \{ T_{i1}, T_{i2}, \ldots, T_{im_i} \} $$
 
 
 ### *Number of isoform : number of isoform*
                              
-$$n_{isoform} = |G|$$
+$$n_{isoform} = n = |G|$$
 
 ### *Standard deviation of the number of GO term*
                              
@@ -53,8 +53,9 @@ $$O = \\bigcup_{i=1}^n I_i = \{ T_{1}, T_{2}, \ldots, T_{n_o} \}$$
                              
 Let $count(T_i)$ the number of isoform where $T_i$ is present.
                              
-$$r = \\frac{1}{n-1} \sum_{i=1}^ {n_o}(count(T_i)-1)$$
-                             
+$$rdd(T_i) = \\frac{1}{n-1} \sum_{i=1}^ {n_o}(count(T_i)-1)$$
+
+We then return the mean $\overline{rdd}$.                             
 
 
 ## Metrics computed in all isoform :
