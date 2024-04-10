@@ -51,7 +51,7 @@ pip install -r requierement.txt
 ## Organization of the repo
 
 - [`data`](data) : data location with [`data/get_data.md`](./data/get_data.md) with information to retreive them
-- [`src`](src) : scripts.
+- [`src`](src) : scripts (see [`src/old_script.md`](./src/old_script.md) for information about deprecated script)
     - [`src/choice_go_set`](src/choice_go_set) : subdirectory with a notebook to explore different dataset we can utilize for our analysis
     - [`src/analysis_notebook`](src/analysis_notebook) : some notebook used as a base for scripts
 
