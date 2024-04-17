@@ -84,11 +84,15 @@ class Gene:
 
     # Setters
         
-    def add_transcript(self, transcript):
+    def add_transcript(self, transcript) -> None:
         if transcript.id in self.transcripts:
             raise ValueError(f"Transcript {transcript.__repr__()} already in the gene")
         else:
             self.transcripts[transcript.id] = transcript
+    
+    def add_transcripts(self, transcripts : list) -> None:
+        for transcript in transcripts:
+            self.add_transcript(transcript)
 
     # Getters
             
