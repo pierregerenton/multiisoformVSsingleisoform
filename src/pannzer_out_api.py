@@ -81,6 +81,10 @@ class Gene:
         return f"Gene '{self.id}' with {len(self.transcripts)} transcripts"
     def __repr__(self) -> str:
         return f"<Gene '{self.id}'>"
+    
+    def __iter__(self):  # delegate iteration to the dict
+        return iter(self.transcripts)
+
 
     # Setters
         
