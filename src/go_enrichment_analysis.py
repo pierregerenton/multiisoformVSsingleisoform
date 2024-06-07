@@ -6,12 +6,15 @@ from goatools.anno.genetogo_reader import Gene2GoReader  # parse NCBI gene2go fi
 from goatools.goea.go_enrichment_ns import GOEnrichmentStudyNS  # perform enrichment
 from goatools.godag_plot import plot_results  # ploting
 
+__author__ = "Gérenton Pierre"
+__credits__ = ["Gérenton Pierre", "Fabio Zanarello", "Roderic Guigó i Serra"]
+__license__ = "CC0 1.0 Universal"
 
 parser = argparse.ArgumentParser(
                     prog='go_enrichment_analysis',
                     description='Write a table with the result of the GOEA \
                         and some plot of the GO DAG with those enriched segment.',
-                    epilog='For more information, contact pierre.gerenton@crg.eu')
+                    epilog='For more information, contact fabio.zanarello@crg.eu')
 
 
 parser.add_argument(

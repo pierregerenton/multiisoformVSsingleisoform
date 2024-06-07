@@ -4,11 +4,14 @@ import pandas as pd
 import argparse
 from os.path import basename
 
+__author__ = "Gérenton Pierre"
+__credits__ = ["Gérenton Pierre", "Fabio Zanarello", "Roderic Guigó i Serra"]
+__license__ = "CC0 1.0 Universal"
 
 parser = argparse.ArgumentParser(
                     prog='intragene_isoform_diversity',
                     description='Compute diversity between all isoform of a gene',
-                    epilog='For more information, contact pierre.gerenton@crg.eu')
+                    epilog='For more information, contact fabio.zanarello@crg.eu')
 
 
 parser.add_argument(

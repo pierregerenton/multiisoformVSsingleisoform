@@ -3,13 +3,17 @@ from matplotlib import pyplot
 import pannzer_out_api as poa
 from os.path import basename
 
+__author__ = "Gérenton Pierre"
+__credits__ = ["Gérenton Pierre", "Fabio Zanarello", "Roderic Guigó i Serra"]
+__license__ = "CC0 1.0 Universal"
+
 parser = argparse.ArgumentParser(
                     prog='similarity',
                     description='Create 3 table for each ontology \
                         with the mean similarity for each pair of \
                             panzzer output in the input + \
                                 write raw data',
-                    epilog='For more information, contact pierre.gerenton@crg.eu')
+                    epilog='For more information, contact fabio.zanarello@crg.eu')
 
 
 parser.add_argument(

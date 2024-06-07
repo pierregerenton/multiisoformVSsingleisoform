@@ -88,6 +88,10 @@ More information in the paper :\n
 `Zhao, C. and Wang, Z. (2018) GOGO: An improved algorithm to measure the semantic similarity between gene ontology terms. Scientific Reports, 8, 15107; doi:10.1038/s41598-018-33219-y.`
 """
 
+__author__ = "Gérenton Pierre"
+__credits__ = ["Gérenton Pierre", "Fabio Zanarello", "Roderic Guigó i Serra"]
+__license__ = "CC0 1.0 Universal"
+__email__ = "fabio.zanarello@crg.eu"
 
 app = Dash(__name__)
 

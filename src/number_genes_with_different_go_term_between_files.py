@@ -4,13 +4,16 @@ from matplotlib import pyplot
 import pannzer_out_api as poa
 from os.path import basename
 
+__author__ = "Gérenton Pierre"
+__credits__ = ["Gérenton Pierre", "Fabio Zanarello", "Roderic Guigó i Serra"]
+__license__ = "CC0 1.0 Universal"
 
 parser = argparse.ArgumentParser(
                     prog='number_genes_with_different_go_term_between_files',
                     description='For each pair of annotation (in input), will\
                           compute the number of genes where GO annotation \
                             differ and print an UpSetPlot',
-                    epilog='For more information, contact pierre.gerenton@crg.eu')
+                    epilog='For more information, contact fabio.zanarello@crg.eu')
 
 
 parser.add_argument(

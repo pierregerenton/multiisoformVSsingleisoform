@@ -10,6 +10,8 @@ The purpose of this project is to extended this analysis to understand the mecha
 
 **Warning** : This repository is just a way to store and share script for people who want to learn about the project. It is not intended to be reproductible as the data used will not be provided in this git. However, the file [`data/get_data.md`](./data/get_data.md) will explain how generate these data locally.
 
+In case of problem, you can contact fabio.zanarello@crg.eu.
+
 ## Summary
 
 - [Goal](#goal)

@@ -9,6 +9,10 @@ from random import shuffle
 from itertools import combinations
 from statistics import pstdev
 
+__author__ = "Gérenton Pierre"
+__credits__ = ["Gérenton Pierre", "Fabio Zanarello", "Roderic Guigó i Serra"]
+__license__ = "CC0 1.0 Universal"
+__email__ = "fabio.zanarello@crg.eu"
 
 class Annotation:
     """Represent a set of genes."""

@@ -1,12 +1,15 @@
 import argparse
 import pannzer_out_api as poa
 
+__author__ = "Gérenton Pierre"
+__credits__ = ["Gérenton Pierre", "Fabio Zanarello", "Roderic Guigó i Serra"]
+__license__ = "CC0 1.0 Universal"
 
 parser = argparse.ArgumentParser(
                     prog='description_table',
                     description='Write a table with isoform information (reformating of Pannzer Output)\
                         and a table of similarity with metadata for a multi-isoform annotation vs singles',
-                    epilog='For more information, contact pierre.gerenton@crg.eu')
+                    epilog='For more information, contact fabio.zanarello@crg.eu')
 
 
 parser.add_argument(
